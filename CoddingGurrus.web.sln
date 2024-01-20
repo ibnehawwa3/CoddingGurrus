@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoddingGurrus.web", "CoddingGurrus.web\CoddingGurrus.web.csproj", "{BA998BDE-52E9-4230-8CBA-025D4016544E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoddingGurrus.web", "CoddingGurrus.web\CoddingGurrus.web.csproj", "{BA998BDE-52E9-4230-8CBA-025D4016544E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoddingGurrus.theme", "CoddingGurrus.theme\CoddingGurrus.theme.csproj", "{4ECC93E5-E17C-4D2B-9800-49FFA5DAAF70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{BA998BDE-52E9-4230-8CBA-025D4016544E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA998BDE-52E9-4230-8CBA-025D4016544E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA998BDE-52E9-4230-8CBA-025D4016544E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ECC93E5-E17C-4D2B-9800-49FFA5DAAF70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ECC93E5-E17C-4D2B-9800-49FFA5DAAF70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ECC93E5-E17C-4D2B-9800-49FFA5DAAF70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ECC93E5-E17C-4D2B-9800-49FFA5DAAF70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
