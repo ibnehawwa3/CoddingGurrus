@@ -1,8 +1,8 @@
-﻿using CoddingGurrus_web.Models;
+﻿using CoddingGurrus.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace CoddingGurrus_web.Controllers
+namespace CoddingGurrus.web.Controllers
 {
     public class HomeController : Controller
     {

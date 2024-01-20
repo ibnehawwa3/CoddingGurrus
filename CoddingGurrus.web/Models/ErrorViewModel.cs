@@ -1,4 +1,4 @@
-namespace CoddingGurrus_web.Models
+namespace CoddingGurrus.web.Models
 {
     public class ErrorViewModel
     {
