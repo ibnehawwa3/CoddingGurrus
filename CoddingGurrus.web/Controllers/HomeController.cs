@@ -12,7 +12,10 @@ namespace CoddingGurrus.web.Controllers
         {
             _logger = logger;
         }
-
+        public IActionResult LayoutTestPage()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             return View();
