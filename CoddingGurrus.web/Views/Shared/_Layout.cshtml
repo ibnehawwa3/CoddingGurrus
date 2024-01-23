@@ -164,7 +164,7 @@
                             <a href="#" class="dropdown-item">Feedback</a>
                             <div class="dropdown-divider"></div>
                             <a href="./settings.html" class="dropdown-item">Settings</a>
-                            <a href="./sign-in.html" class="dropdown-item">Logout</a>
+                            <a href="/account/logout/" class="dropdown-item">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -611,6 +611,7 @@
         </div>
         </nav>
         </header>*@
+
         <div class="page-wrapper">
             @RenderBody()
             <footer class="footer footer-transparent d-print-none">
@@ -1348,16 +1349,16 @@
                 }],
             })).render();
         });
-                              // formatter:on
+                                      // formatter:on
     </script>
-    @*    <footer class="border-top footer text-muted">
-    <div class="container">
-    &copy; 2024 - CoddingGurrus.web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
+    @*<footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - CoddingGurrus.web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)*@
+    <script src="~/js/site.js" asp-append-version="true"></script>*@
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
