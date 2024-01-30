@@ -5,18 +5,14 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
 {
     public class ApiHelperFunctions
     {
-        static bool isRunning = false;
-
-        public ResponseModel GetResult(string RequestUri, string ContentBody)
+        public async Task<LoginResponseModel> GetTokenResult(string RequestUri, string ContentBody)
         {
+            LoginResponseModel responseModel = new LoginResponseModel();
+
             if (string.IsNullOrEmpty(SetTokenModel.Token) || SetTokenModel.ExpireTime <= DateTime.Now)
             {
-                GetTokenModel.GetToken().Wait();
+                responseModel = await GetTokenModel.GetToken();
             }
-
-            ResponseModel responseModel = new ResponseModel();
-
-            responseModel = DownloadManager.DownloadDataUsingWebClient(RequestUri, ContentBody);
 
             return responseModel;
         }
@@ -27,13 +23,9 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
             {
                 GetTokenModel.GetToken().Wait();
             }
-
             ResponseModel responseModel = new ResponseModel();
-
             responseModel = DownloadManager.DownloadDataUsingWebClient(RequestUri, "");
-
             return responseModel;
         }
-
     }
 }

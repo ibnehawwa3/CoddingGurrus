@@ -14,14 +14,13 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
 {
     public class GetTokenModel
     {
-        public string auth_token { get; set; }
-        public static async Task GetToken()
+        public static async Task<LoginResponseModel> GetToken()
         {
+            LoginResponseModel getTokenModel = new LoginResponseModel();
             if (string.IsNullOrEmpty(SetTokenModel.Token))
             {
                 if (string.IsNullOrEmpty(SetTokenModel.Token))
                 {
-                    LoginResponseModel getTokenModel = new LoginResponseModel();
                     try
                     {
                         Hashtable hashtable = new Hashtable();
@@ -53,6 +52,7 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
                             string results = client.UploadString(ApiUri.Info_API.APIUrl + "/" + url, "Post", json);
                             responseModel = JsonConvert.DeserializeObject<ResponseModel>(results);
                             getTokenModel = JsonConvert.DeserializeObject<LoginResponseModel>(Convert.ToString(responseModel.Data));
+                            return getTokenModel;
                         }
                         SetTokenModel.Token = getTokenModel.auth_token;
                         SetTokenModel.ExpireTime = getTokenModel.expiration_time;
@@ -62,6 +62,7 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
                     }
                 }
             }
+            return getTokenModel;
         }
     }
 }

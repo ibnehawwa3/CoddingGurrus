@@ -25,19 +25,27 @@ namespace CoddingGurrus.web.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login(LoginModel loginModel)
+        public async Task<IActionResult> Login(LoginModel loginModel)
         {
-            var model = new LoginResponseModel();
-            ApiHelperFunctions apiHelperFunctions = new ApiHelperFunctions();
-            Hashtable hashtable = new Hashtable();
-            hashtable.Add("Email", loginModel.Email);
-            hashtable.Add("Password", loginModel.Password);
+            var apiHelperFunctions = new ApiHelperFunctions();
 
-            string json = JsonConvert.SerializeObject(hashtable);
-            ResponseModel responseModel = apiHelperFunctions.GetResult("api/account/login", json);
-            model = JsonConvert.DeserializeObject<LoginResponseModel>(Convert.ToString(responseModel.Data));
+            string json = JsonConvert.SerializeObject(new Hashtable
+            {
+                { "Email", loginModel.Email },
+                { "Password", loginModel.Password }
+            });
+
+            LoginResponseModel loginResponseModel = await apiHelperFunctions.GetTokenResult("api/account/login", json);
+            // Convert LoginResponseModel to JSON string before storing in TempData
+            string loginResponseModelJson = JsonConvert.SerializeObject(loginResponseModel);
+
+            // Store the JSON string in TempData
+            TempData["loginResponseModel"] = loginResponseModelJson;
+            // Now you can use the 'model' variable to handle the result or perform further actions.
+
             return RedirectToAction("Index", "Dashboard");
         }
+
         public IActionResult Logout()
         {
             return RedirectToAction("Login");
