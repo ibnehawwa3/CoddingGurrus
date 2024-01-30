@@ -26,7 +26,6 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
                     ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072 | SecurityProtocolType.Tls
                            | SecurityProtocolType.Tls11
                            | SecurityProtocolType.Tls12;
-                    //| SecurityProtocolType.Ssl3;
                     ServicePointManager.ServerCertificateValidationCallback =
                          delegate (
                              object s,
@@ -93,7 +92,6 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
                     _Body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
                     var res = client.PostAsync(client.BaseAddress.AbsoluteUri, _Body).Result;
-                    //var res = client.PostAsync(new Uri(client.BaseAddress, RequestUri), _Body).Result;
 
                     if (res.IsSuccessStatusCode)
                     {
