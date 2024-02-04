@@ -1,4 +1,5 @@
-﻿@model CoddingGurrus.web.Helper.GridViewModel<CoddingGurrus.Core.Models.User.UserModel>
+﻿@using System.Text.RegularExpressions;
+@model CoddingGurrus.web.Helper.GridViewModel<CoddingGurrus.Core.Models.User.UserModel>
 
 <div class="col-12">
     <div class="card">
@@ -17,13 +18,13 @@
                 <div class="ms-auto text-muted">
                     Search:
                     <div class="ms-2 d-inline-block">
-                        <input type="text" class="form-control form-control-sm" aria-label="Search invoice">
+                        <input type="text" id="searchInput" class="form-control form-control-sm" aria-label="Search invoice">
                     </div>
                 </div>
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table card-table table-vcenter text-nowrap datatable">
+            <table class="table card-table table-vcenter text-nowrap datatable" id="#userListTable">
                 <thead>
                     <tr>
                         @*<th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
@@ -31,9 +32,9 @@
                             No. <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sm icon-thick" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 15l6 -6l6 6" /></svg>
                         </th>*@
-                        @foreach (var prop in Model.Data.First().GetType().GetProperties())
+                        @foreach (var fileds in Model.Configuration.DisplayFields)
                         {
-                            <th>@prop.Name</th>
+                            <th>@Regex.Replace(fileds, "([a-z])([A-Z])", "$1 $2")</th>
                         }
                         <th></th>
                     </tr>
@@ -42,9 +43,9 @@
                     @foreach (var item in Model.Data)
                     {
                         <tr>
-                            @foreach (var prop in item.GetType().GetProperties())
+                            @foreach (var field in Model.Configuration.DisplayFields)
                             {
-                                <td>@prop.GetValue(item)</td>
+                                <td>@item.GetType().GetProperty(field).GetValue(item)</td>
                             }
                             <td class="text-end">
                                 <span class="dropdown">
@@ -64,22 +65,25 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer d-flex align-items-center">
+        <div class="card-footer d-flex align-items-center" id="paginationDiv" style="display: none !important;">
             <p class="m-0 text-muted">Showing <span>@Model.Configuration.Skip</span> to <span>@Model.Configuration.Take</span> of <span>@Model.Data.First().TotalRecords</span> entries</p>
             <ul class="pagination m-0 ms-auto">
-                <li class="page-item disabled">
+                <li class="page-item @Model.Configuration.Skip == 1 ? "disabled" : "")">
                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
                         <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 6l-6 6l6 6" /></svg>
                         prev
                     </a>
                 </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                <li class="page-item"><a class="page-link" href="#">5</a></li>
-                <li class="page-item">
+
+                @for (int i = 1; i <= Model.Configuration.NoOfPages; i++)
+                {
+                    <li class="page-item @(i == Model.Configuration.Skip ? "active" : "")">
+                        <a class="page-link" href="#">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.Configuration.Skip == Model.Configuration.NoOfPages ? "disabled" : "")">
                     <a class="page-link" href="#">
                         next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 6l6 6l-6 6" /></svg>
@@ -89,3 +93,73 @@
         </div>
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#searchInput").on('input', function () {
+            var searchTerm = $(this).val();
+            $.ajax({
+                url: "/User/Search",
+                type: "GET",
+                data: { searchTerm: searchTerm },
+                success: function (data) {
+                    debugger;
+                    var element = document.getElementById("paginationDiv");
+                    if (data.configuration.skip > 0) {
+                        if (element) {
+                            element.style.display = "block"; 
+                        }
+                    }
+                    else{
+                        element.style.display = "none !important";
+                    }
+
+                    var updatedModel = data;
+                    var displayFieldsArray = updatedModel;
+                    if (displayFieldsArray) {
+                        updateGrid(updatedModel);
+                    } else {
+                        console.error("displayFields is not an array or is undefined.");
+                    }
+                },
+
+                error: function () {
+                    console.log("Error during AJAX request");
+                }
+            });
+        });
+
+        function updateGrid(dataModel) {
+
+            $("tbody").find("tr").remove();
+
+            $.each(dataModel.data, function (index, item) {
+                var row = $('<tr>');
+                
+                dataModel.configuration.displayFields.forEach(field => {
+                    const modifiedStr = field.charAt(0).toLowerCase() + field.slice(1);
+                    if (modifiedStr in item) {
+                        row.append(`<td>${item[modifiedStr]}</td>`);
+                    } else {
+                        console.log(`Key '${modifiedStr}' not found in the object.`);
+                    }
+                });
+
+                row.append('<td class="text-end">' +
+                    '<span class="dropdown">' +
+                    '<button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Actions</button>' +
+                    '<div class="dropdown-menu dropdown-menu-end">' +
+                    '<a class="dropdown-item" href="#">Action</a>' +
+                    '<a class="dropdown-item" href="#">Another action</a>' +
+                    '</div>' +
+                    '</span>' +
+                    '</td>');
+
+                $("tbody").append(row);
+            });
+        }
+    });
+
+</script>
