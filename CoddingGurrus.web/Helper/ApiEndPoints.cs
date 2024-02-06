@@ -6,7 +6,7 @@ namespace CoddingGurrus.web.Helper
     public static class ApiEndPoints
     {
         public const string GetUsers = "/api/User/list";
-        public const string CreateUsers = "/api/Account/RegisterRequest";
+        public const string CreateUsers = "/api/Account/register";
     }
 
     public static class GridHeaderText
