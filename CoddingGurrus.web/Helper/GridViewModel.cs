@@ -15,6 +15,10 @@ namespace CoddingGurrus.web.Helper
         public int Take { get; set; }
         public int NoOfPages { get; set; }
         public string HeaderText { get; set; }
+        public string CreateAction{ get; set; }
+        public string UpdateAction { get; set; }
+        public string DeleteAction { get; set; }
+        public string CreateButtonText { get; set; }
         public bool ShowHeaders { get; set; }
         public List<string> DisplayFields { get; set; }
     }

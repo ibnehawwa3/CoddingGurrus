@@ -1,0 +1,37 @@
+﻿@model CoddingGurrus.Core.Models.User.UserModel;
+<div class="page-body">
+    <div class="container-xl">
+        <div class="col-md-12 mb-5">
+            @using(Html.BeginForm("Create", "User", FormMethod.Post, new { @class = "card" }))
+            {
+                <div class="card-header">
+                    <h3 class="card-title">Create New User</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label required">Name</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "Enter Name", @required = "required" })
+                            <small class="form-hint">We'll never share your email with anyone else.</small>
+                        </div>
+                        <label class="col-2 col-form-label required">Email address</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Email,new { @class = "form-control", @placeholder = "Enter email", @required = "required" })
+                            <small class="form-hint">We'll never share your email with anyone else.</small>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-2 col-form-label required">Password</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Password, new { @class = "form-control", @placeholder = "Enter Password", @required = "required" })
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="@Url.Action("Index","User")" class="btn btn-danger">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

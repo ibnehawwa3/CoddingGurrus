@@ -174,7 +174,7 @@
                 <div class="navbar">
                     <div class="container-xl">
                         <ul class="navbar-nav">
-                            <li class="nav-item active">
+                            <li class="nav-item active" onclick="activateNavItem(this)">
                                 <a class="nav-link" href="#">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/home -->
@@ -185,89 +185,24 @@
                                     </span>
                                 </a>
                             </li>
-                            <li class="nav-item dropdown">
+                            <li class="nav-item dropdown" onclick="activateNavItem(this)">
                                 <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/package -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /><path d="M16 5.25l-8 4.5" /></svg>
                                     </span>
                                     <span class="nav-link-title">
-                                        Interface
+                                        User
                                     </span>
                                 </a>
                                 <div class="dropdown-menu">
                                     <div class="dropdown-menu-columns">
                                         <div class="dropdown-menu-column">
-                                            <a class="dropdown-item" href="#">
-                                                Accordion
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Blank page
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Badges
-                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Buttons
-                                            </a>
-                                            <div class="dropend">
-                                                <a class="dropdown-item dropdown-toggle" href="#sidebar-cards" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
-                                                    Cards
-                                                    <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                                </a>
-                                                <div class="dropdown-menu">
-                                                    <a href="#" class="dropdown-item">
-                                                        Sample cards
-                                                    </a>
-                                                    <a href="#" class="dropdown-item">
-                                                        Card actions
-                                                        <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                                    </a>
-                                                    <a href="#" class="dropdown-item">
-                                                        Cards Masonry
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <a class="dropdown-item" href="#">
-                                                Colors
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Data grid
-                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Datatables
-                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Dropdowns
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Modals
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Maps
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Map fullsize
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Vector maps
-                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Navigation
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Charts
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                <!-- Download SVG icon from http://tabler-icons.io/i/pie-chart -->
-                                                Pagination
+                                            <a class="dropdown-item" href="@Url.ActionLink("Index","User")">
+                                                User List
                                             </a>
                                         </div>
-                                        <div class="dropdown-menu-column">
+                                        <div class="dropdown-menu-column d-none">
                                             <a class="dropdown-item" href="#">
                                                 Placeholder
                                             </a>
@@ -1348,8 +1283,39 @@
                 }],
             })).render();
         });
-                                      // formatter:on
+
+        function activateNavItem(selectedItem) {
+
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+
+            selectedItem.classList.add('active');
+            var activeNavLinkTitle = document.querySelector('.nav-item.active .nav-link-title');
+            if (activeNavLinkTitle) {
+                localStorage.setItem('selectedNavItem', activeNavLinkTitle.textContent.trim());
+            }
+        }
+        debugger
+        @if (ViewBag.ClearLocalStorage != null && ViewBag.ClearLocalStorage)
+        {
+           <script>
+                localStorage.removeItem('selectedNavItem');
+          </script>
+        }
+        const selectedNavItemText = localStorage.getItem('selectedNavItem');
+        if (selectedNavItemText) {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.innerText.trim() === selectedNavItemText) {
+                    const navItems = document.querySelectorAll('.nav-item');
+                    navItems.forEach(item => item.classList.remove('active'));
+                    item.classList.add('active');
+                }
+            });
+        }
+                // formatter:on
     </script>
+
     @*<footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - CoddingGurrus.web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

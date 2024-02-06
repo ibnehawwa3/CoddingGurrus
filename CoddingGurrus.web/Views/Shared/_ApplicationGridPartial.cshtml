@@ -1,10 +1,15 @@
 ﻿@using System.Text.RegularExpressions;
-@model CoddingGurrus.web.Helper.GridViewModel<CoddingGurrus.Core.Models.User.UserModel>
+@model CoddingGurrus.web.Helper.GridViewModel<CoddingGurrus.Core.Dtos.UserDto>
 
 <div class="col-12">
     <div class="card">
-        <div class="card-header">
+        <div class="card-header d-flex justify-content-between">
             <h3 class="card-title">@Model.Configuration.HeaderText</h3>
+            <a asp-controller="User" asp-action="Create" class="btn btn-primary d-none d-sm-inline-block" >
+                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                @Model.Configuration.CreateButtonText
+            </a>
         </div>
         <div class="card-body border-bottom py-3">
             <div class="d-flex">
@@ -65,7 +70,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer d-flex align-items-center" id="paginationDiv" style="display: none !important;">
+        <div class="card-footer d-flex align-items-center" id="paginationDiv">
             <p class="m-0 text-muted">Showing <span>@Model.Configuration.Skip</span> to <span>@Model.Configuration.Take</span> of <span>@Model.Data.First().TotalRecords</span> entries</p>
             <ul class="pagination m-0 ms-auto">
                 <li class="page-item @Model.Configuration.Skip == 1 ? "disabled" : "")">

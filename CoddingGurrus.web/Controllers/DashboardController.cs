@@ -20,7 +20,7 @@ namespace CoddingGurrus.web.Controllers
                 // Clear the TempData to ensure it's only used once
                 TempData.Remove("loginResponseModel");
             }
-
+            ViewBag.ClearLocalStorage = true;
             return View(loginResponseModel);
         }
     }
