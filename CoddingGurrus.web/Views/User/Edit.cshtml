@@ -1,0 +1,80 @@
+﻿@model CoddingGurrus.Core.Models.User.UserProfileModel;
+<div class="page-body">
+    <div class="container-xl">
+        <div class="col-md-12 mb-5">
+            @using(Html.BeginForm("Edit", "User", FormMethod.Post, new { @class = "card" }))
+            {
+                <div class="card-header">
+                    <h3 class="card-title">Update Profile</h3>
+                </div>
+                <div class="card-body">
+                    @Html.HiddenFor(model=>model.UserId)
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label required">First Name</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.FirstName)
+                        </div>
+                        <label class="col-2 col-form-label required">Last Name</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.LastName,new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.LastName)
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label required">Email address</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.EmailAddress,new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.EmailAddress)
+                        </div>
+                        <label class="col-2 col-form-label required">Mobile Number</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.MobileNumber, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.MobileNumber)
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label required">Street Number</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.StreetNumber, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.StreetNumber)
+                        </div>
+                        <label class="col-2 col-form-label required">Country</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Country, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Country)
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        @*<label class="col-2 col-form-label required">Country Code</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.CountryCode, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.CountryCode)
+                        </div>*@
+                        <label class="col-2 col-form-label required">Town</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Town, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Town)
+                        </div>
+                        <label class="col-2 col-form-label required">Registration Date</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.DateRegistration, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.DateRegistration)
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label required">Zip Code</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.ZipCode, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.ZipCode)
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="@Url.Action("Index","User")" class="btn btn-danger">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -24,8 +24,8 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
                     try
                     {
                         Hashtable hashtable = new Hashtable();
-                        hashtable.Add("email", "admin@admin.com");
-                        hashtable.Add("password", "1234567aa");
+                        hashtable.Add("email", "ali@gmail.com");
+                        hashtable.Add("password", "Niaz123!@#");
 
                         var json = JsonConvert.SerializeObject(hashtable);
                         var url = "api/account/login";
@@ -52,10 +52,10 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
                             string results = client.UploadString(ApiUri.Info_API.APIUrl + "/" + url, "Post", json);
                             responseModel = JsonConvert.DeserializeObject<ResponseModel>(results);
                             getTokenModel = JsonConvert.DeserializeObject<LoginResponseModel>(Convert.ToString(responseModel.Data));
+                            SetTokenModel.Token = getTokenModel.auth_token;
+                            SetTokenModel.ExpireTime = getTokenModel.expiration_time;
                             return getTokenModel;
                         }
-                        SetTokenModel.Token = getTokenModel.auth_token;
-                        SetTokenModel.ExpireTime = getTokenModel.expiration_time;
                     }
                     catch (Exception ex)
                     {

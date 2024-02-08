@@ -545,8 +545,11 @@
         </div>
         </nav>
         </header>*@
-
         <div class="page-wrapper">
+            @if (ViewBag.ShowLoader != null && ViewBag.ShowLoader)
+            {
+                @Html.Partial("_ApplicationLoader")
+            }
             @RenderBody()
             <footer class="footer footer-transparent d-print-none">
                 <div class="container-xl">

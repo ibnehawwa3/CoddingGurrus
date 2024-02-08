@@ -49,8 +49,44 @@ namespace CoddingGurrus.web.Controllers.Users
             return View(model);
         }
 
+
+        public IActionResult Edit(string id)
+        {
+            GetUserProfileRequest getUserProfileRequest = new GetUserProfileRequest
+            {
+                Id = id.ToString()
+            };
+            var response = baseHandler.PostAsync<GetUserProfileRequest, UserResponseModel>(getUserProfileRequest,ApiEndPoints.GetUserProfile).Result;
+            var userDto = JsonConvert.DeserializeObject<UserProfileModel>(response.Data);
+            return View(userDto);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(UserProfileModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = baseHandler.PostAsync<UserProfileModel, UserResponseModel>(model, ApiEndPoints.UpdateUserProfile).Result;
+
+                if (response.Success)
+                    return RedirectToAction("Index");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(string id)
+        {
+            var response = baseHandler.DeleteAsync<UserResponseModel>(ApiEndPoints.DeleteUserProfile + "?Id=" + id).Result;
+
+            if (response.Success)
+                return RedirectToAction("Index");
+            return View(response);
+        }
         private void GetUsers(string SeacrhText=null)
         {
+            ViewBag.ShowLoader = true;
             var response = baseHandler.GetAsync<UserResponseModel>(ApiEndPoints.GetUsers + "?Skip=" + this.Skip + "&Take=" + this.Take+ "&TextToSearch="+SeacrhText).Result;
 
             if (response.Success)
@@ -71,6 +107,7 @@ namespace CoddingGurrus.web.Controllers.Users
                             DisplayFields = DisplayFieldsHelper.GetDisplayFields<UserDto>(property => property.Name != "TotalRecords" && property.Name != "Id" && property.Name != "DateRegistration" && property.Name!= "Password")
                         }
                     };
+                    ViewBag.ShowLoader = false;
                 }
                 else
                 {
@@ -83,6 +120,7 @@ namespace CoddingGurrus.web.Controllers.Users
                             NoOfPages = 0,
                         }
                     };
+                    ViewBag.ShowLoader = false;
                 }
             }
         }

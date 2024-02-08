@@ -56,11 +56,11 @@
                                 <span class="dropdown">
                                     <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Actions</button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">
-                                            Action
+                                        <a class="dropdown-item" href="@Url.Action("Edit","User")?id=@item.Id">
+                                            Edit
                                         </a>
-                                        <a class="dropdown-item" href="#">
-                                            Another action
+                                        <a class="dropdown-item" id="deleteItem" data-bs-toggle="modal" href="#" data-bs-target="#modal-danger" data-item-id="@item.Id">
+                                            Delete
                                         </a>
                                     </div>
                                 </span>
@@ -95,6 +95,38 @@
                     </a>
                 </li>
             </ul>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+                <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
+                <h3>Are you sure?</h3>
+                <div class="text-muted">Do you really want to remove this item? What you've done cannot be undone.</div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <input type="hidden" id="Id" />
+                            <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                Cancel
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="href="#" id="deleteConfirm" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -165,6 +197,31 @@
                 $("tbody").append(row);
             });
         }
+    });
+
+    $("#deleteItem").click(function(){
+        debugger
+        var d = $(this).data("item-id");
+        $("#Id").val(d);
+    })
+
+
+    $("#deleteConfirm").click(function () {
+        var id=$("#Id").val();
+        debugger
+        $.ajax({
+            url: '@Url.Action("Delete", "User")',
+            type: 'POST',
+            data: { id: id },
+            success: function (response) {
+                alert("Item deleted successfully");
+                location.reload(); 
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                alert("Error deleting item");
+            }
+        });
     });
 
 </script>
