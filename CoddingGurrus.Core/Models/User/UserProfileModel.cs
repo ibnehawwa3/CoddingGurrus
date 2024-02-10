@@ -8,6 +8,7 @@ namespace CoddingGurrus.Core.Models.User
 {
     public class UserProfileModel
     {
+        public int Id { get; set; }
         public string MobileNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -18,7 +19,7 @@ namespace CoddingGurrus.Core.Models.User
         public string CountryCode { get; set; }
         public string EmailAddress { get; set; }
         public int TotalRecords { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public DateTime DateRegistration { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
     {
         public Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            return GetTokenModel.GetToken();
+            return GetTokenModel.GetToken(string.Empty);
         }
     }
 }

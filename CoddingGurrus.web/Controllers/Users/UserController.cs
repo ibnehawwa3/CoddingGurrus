@@ -27,14 +27,15 @@ namespace CoddingGurrus.web.Controllers.Users
 
         public IActionResult Index()
         {
-            GetUsers();
+            GetUsers(string.Empty);
             return View(gridViewModel);
         }
         public IActionResult Create()
         {
             return View();
         }
-        // POST: /User/Create
+
+
         [HttpPost]
         public IActionResult Create(UserModel model)
         {
@@ -54,7 +55,7 @@ namespace CoddingGurrus.web.Controllers.Users
         {
             GetUserProfileRequest getUserProfileRequest = new GetUserProfileRequest
             {
-                Id = id.ToString()
+                Id = id
             };
             var response = baseHandler.PostAsync<GetUserProfileRequest, UserResponseModel>(getUserProfileRequest,ApiEndPoints.GetUserProfile).Result;
             var userDto = JsonConvert.DeserializeObject<UserProfileModel>(response.Data);
@@ -84,7 +85,7 @@ namespace CoddingGurrus.web.Controllers.Users
                 return RedirectToAction("Index");
             return View(response);
         }
-        private void GetUsers(string SeacrhText=null)
+        private void GetUsers(string SeacrhText)
         {
             ViewBag.ShowLoader = true;
             var response = baseHandler.GetAsync<UserResponseModel>(ApiEndPoints.GetUsers + "?Skip=" + this.Skip + "&Take=" + this.Take+ "&TextToSearch="+SeacrhText).Result;
@@ -104,7 +105,7 @@ namespace CoddingGurrus.web.Controllers.Users
                             Skip = Skip,
                             Take = Take,
                             NoOfPages = (int)Math.Ceiling((double)userModels.FirstOrDefault().TotalRecords / Take),
-                            DisplayFields = DisplayFieldsHelper.GetDisplayFields<UserDto>(property => property.Name != "TotalRecords" && property.Name != "Id" && property.Name != "DateRegistration" && property.Name!= "Password")
+                            DisplayFields = DisplayFieldsHelper.GetDisplayFields<UserDto>(property => property.Name != "TotalRecords" && property.Name != "Id" && property.Name != "DateRegistration" && property.Name!= "UserProfileId")
                         }
                     };
                     ViewBag.ShowLoader = false;

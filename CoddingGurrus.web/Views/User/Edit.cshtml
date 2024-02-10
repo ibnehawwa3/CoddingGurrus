@@ -68,6 +68,11 @@
                             @Html.TextBoxFor(model => model.ZipCode, new { @class = "form-control", @required = "required" })
                             @Html.ValidationMessageFor(model => model.ZipCode)
                         </div>
+                        <label class="col-2 col-form-label required">Country Code</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.CountryCode, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.CountryCode)
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer text-end">

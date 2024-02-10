@@ -10,6 +10,7 @@ namespace CoddingGurrus.web.Helper
         public const string GetUserProfile = "/api/UserProfile/get-profile";
         public const string UpdateUserProfile = "/api/UserProfile/update-profile";
         public const string DeleteUserProfile = "/api/UserProfile/delete";
+        public const string Login = "api/account/login";
     }
 
     public static class GridHeaderText

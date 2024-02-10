@@ -14,7 +14,7 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
 {
     public class GetTokenModel
     {
-        public static async Task<LoginResponseModel> GetToken()
+        public static async Task<LoginResponseModel> GetToken(string ContentBody)
         {
             LoginResponseModel getTokenModel = new LoginResponseModel();
             if (string.IsNullOrEmpty(SetTokenModel.Token))
@@ -23,9 +23,9 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
                 {
                     try
                     {
-                        Hashtable hashtable = new Hashtable();
-                        hashtable.Add("email", "ali@gmail.com");
-                        hashtable.Add("password", "Niaz123!@#");
+                        Hashtable hashtable = JsonConvert.DeserializeObject<Hashtable>(ContentBody);
+                        //hashtable.Add("email", "nzi@gmail.com");
+                        //hashtable.Add("password", "Niaz123!@#");
 
                         var json = JsonConvert.SerializeObject(hashtable);
                         var url = "api/account/login";

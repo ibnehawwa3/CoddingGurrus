@@ -21,27 +21,18 @@ namespace CoddingGurrus.Infrastructure.CommonHelper.Handler
             httpClient = new HttpClient();
             apiHelperFunctions = new ApiHelperFunctions();
             responseModel= new ResponseModel();
+            SetBearer();
         }
 
         public async Task<TResponse> PostAsync<TRequest, TResponse>(TRequest request, string apiEndpoint)
         {
-            GetResult(apiEndpoint);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SetTokenModel.Token);
-            // Serialize request object to JSON
-            var jsonRequest = JsonConvert.SerializeObject(request);
-
-            var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-
-            var response = await httpClient.PostAsync(ApiUri.Info_API.APIUrl + apiEndpoint, content);
+            var response = await httpClient.PostAsync(ApiUri.Info_API.APIUrl + apiEndpoint, new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json"));
 
             return await HandleResponse<TResponse>(response);
         }
 
         public async Task<TResponse> DeleteAsync<TResponse>(string apiEndpoint)
         {
-            GetResult(apiEndpoint);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SetTokenModel.Token);
-
             var response = await httpClient.DeleteAsync(ApiUri.Info_API.APIUrl + apiEndpoint);
 
             return await HandleResponse<TResponse>(response);
@@ -49,8 +40,6 @@ namespace CoddingGurrus.Infrastructure.CommonHelper.Handler
 
         public async Task<TResponse> GetAsync<TResponse>(string apiEndpoint)
         {
-            GetResult(apiEndpoint);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SetTokenModel.Token);
             var response = await httpClient.GetAsync(ApiUri.Info_API.APIUrl + apiEndpoint);
 
             return await HandleResponse<TResponse>(response);
@@ -58,8 +47,6 @@ namespace CoddingGurrus.Infrastructure.CommonHelper.Handler
 
         public async Task<TResponse> GetByIdAsync<TResponse>(string apiEndpoint, int id)
         {
-            GetResult(apiEndpoint);
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SetTokenModel.Token);
             var response = await httpClient.GetAsync(ApiUri.Info_API.APIUrl + apiEndpoint);
 
             return await HandleResponse<TResponse>(response);
@@ -81,42 +68,14 @@ namespace CoddingGurrus.Infrastructure.CommonHelper.Handler
             }
         }
 
-        public ResponseModel GetResult(string RequestUri, string ContentBody = "")
+        public void SetBearer()
         {
             ResponseModel responseModel = new ResponseModel();
             if (string.IsNullOrEmpty(SetTokenModel.Token) || SetTokenModel.ExpireTime <= DateTime.Now)
             {
-                GetTokenModel.GetToken().Wait();
+                GetTokenModel.GetToken(string.Empty).Wait();
             }
-            try
-            {
-                using (var client = new WebClient())
-                {
-                    client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                    client.Headers["Authorization"] = String.Format("Bearer {0}", SetTokenModel.Token);
-
-                    //string results = client.UploadString(ApiUri.GetAPIUrl + "/" + RequestUri, "Post", ContentBody);
-                    //responseModel = JsonConvert.DeserializeObject<ResponseModel>(results);
-                }
-            }
-            catch (Exception ex)
-            {
-                try
-                {
-                    using (var client = new WebClient())
-                    {
-                        client.Headers[HttpRequestHeader.ContentType] = "application/json";
-                        client.Headers["Authorization"] = String.Format("Bearer {0}", SetTokenModel.Token);
-
-                        //string results = client.UploadString(ApiUri.GetAPIUrl + "/" + RequestUri, "Post", ContentBody);
-                        //responseModel = JsonConvert.DeserializeObject<ResponseModel>(results);
-                    }
-                }
-                catch (Exception e)
-                {
-                }
-            }
-            return responseModel;
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", SetTokenModel.Token);
         }
     }
 

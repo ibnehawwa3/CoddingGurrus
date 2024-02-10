@@ -11,7 +11,7 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
 
             if (string.IsNullOrEmpty(SetTokenModel.Token) || SetTokenModel.ExpireTime <= DateTime.Now)
             {
-                responseModel = await GetTokenModel.GetToken();
+                responseModel = await GetTokenModel.GetToken(ContentBody);
             }
 
             return responseModel;
@@ -21,7 +21,7 @@ namespace CoddingGurrus.Infrastructure.CommonHelper
         {
             if (string.IsNullOrEmpty(SetTokenModel.Token) || SetTokenModel.ExpireTime <= DateTime.Now)
             {
-                GetTokenModel.GetToken().Wait();
+                GetTokenModel.GetToken(string.Empty).Wait();
             }
             ResponseModel responseModel = new ResponseModel();
             responseModel = DownloadManager.DownloadDataUsingWebClient(RequestUri, "");

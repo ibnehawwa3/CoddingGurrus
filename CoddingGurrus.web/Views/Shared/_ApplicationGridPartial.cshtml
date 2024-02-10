@@ -188,22 +188,24 @@
                     '<span class="dropdown">' +
                     '<button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Actions</button>' +
                     '<div class="dropdown-menu dropdown-menu-end">' +
-                    '<a class="dropdown-item" href="#">Action</a>' +
-                    '<a class="dropdown-item" href="#">Another action</a>' +
+                    '<a class="dropdown-item" href="@Url.Action("Edit","User")?id=' + item.id + '">Edit</a>' +
+                    '<a class="dropdown-item" id="deleteItem" data-bs-toggle="modal" href="#" data-bs-target="#modal-danger" data-item-id="' + item.id + '">Delete</a>' +
                     '</div>' +
                     '</span>' +
                     '</td>');
+
 
                 $("tbody").append(row);
             });
         }
     });
 
-    $("#deleteItem").click(function(){
-        debugger
-        var d = $(this).data("item-id");
-        $("#Id").val(d);
-    })
+    $(document).ready(function () {
+        $(document).on("click", "#deleteItem", function () {
+            var d = $(this).data("item-id");
+            $("#Id").val(d);
+        });
+    });
 
 
     $("#deleteConfirm").click(function () {
@@ -214,12 +216,10 @@
             type: 'POST',
             data: { id: id },
             success: function (response) {
-                alert("Item deleted successfully");
                 location.reload(); 
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
-                alert("Error deleting item");
             }
         });
     });

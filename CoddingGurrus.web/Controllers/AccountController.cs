@@ -6,6 +6,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Collections;
 using System.Reflection;
 using CoddingGurrus.Infrastructure.CommonHelper;
+using CoddingGurrus.web.Helper;
 
 namespace CoddingGurrus.web.Controllers
 {
@@ -35,7 +36,7 @@ namespace CoddingGurrus.web.Controllers
                 { "Password", loginModel.Password }
             });
 
-            LoginResponseModel loginResponseModel = await apiHelperFunctions.GetTokenResult("api/account/login", json);
+            LoginResponseModel loginResponseModel = await apiHelperFunctions.GetTokenResult(ApiEndPoints.Login, json);
             // Convert LoginResponseModel to JSON string before storing in TempData
             string loginResponseModelJson = JsonConvert.SerializeObject(loginResponseModel);
 
@@ -43,7 +44,12 @@ namespace CoddingGurrus.web.Controllers
             TempData["loginResponseModel"] = loginResponseModelJson;
             // Now you can use the 'model' variable to handle the result or perform further actions.
 
-            return RedirectToAction("Index", "Dashboard");
+            if (!string.IsNullOrEmpty(SetTokenModel.Token))
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            return View();
         }
 
         public IActionResult Logout()
