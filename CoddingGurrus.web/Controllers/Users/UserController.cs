@@ -6,133 +6,97 @@ using CoddingGurrus.Infrastructure.CommonHelper.Handler;
 using CoddingGurrus.web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoddingGurrus.web.Controllers.Users
 {
     public class UserController : Controller
     {
-        private readonly IBaseHandler baseHandler;
-        private List<UserDto> userModels;
-        private GridViewModel<UserDto> gridViewModel;
-        private int Skip = 1;
-        private int Take = 10;
+        private readonly IBaseHandler _baseHandler;
+        private readonly int _defaultTake = 10;
+        private readonly int _defaultSkip = 1;
 
         public UserController(IBaseHandler baseHandler)
         {
-            this.baseHandler = baseHandler;
-            userModels = new List<UserDto>();
-            ViewBag.ClearLocalStorage = false;
+            _baseHandler = baseHandler;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchTerm = "")
         {
-            GetUsers(string.Empty);
-            return View(gridViewModel);
-        }
-        public IActionResult Create()
-        {
-            return View();
+            var viewModel = await GetUsersViewModelAsync(searchTerm);
+            return View(viewModel);
         }
 
+        [HttpGet("create")]
+        public IActionResult Create() => View();
 
-        [HttpPost]
-        public IActionResult Create(UserModel model)
+        [HttpPost("create")]
+        public async Task<IActionResult> Create(UserModel model)
         {
             if (ModelState.IsValid)
             {
                 model.DateRegistration = DateTime.Now;
-                var response = baseHandler.PostAsync<UserModel,UserResponseModel>(model,ApiEndPoints.CreateUsers).Result;
-
-                if (response.Success)
+                if ((await _baseHandler.PostAsync<UserModel, UserResponseModel>(model, ApiEndPoints.CreateUsers)).Success)
                     return RedirectToAction("Index");
             }
-
             return View(model);
         }
 
+        [HttpGet("edit")]
+        public async Task<IActionResult> Edit(string id) => View(await GetUserProfileAsync(id));
 
-        public IActionResult Edit(string id)
+        [HttpPost("edit")]
+        public async Task<IActionResult> Edit(UserProfileModel model)
         {
-            GetUserProfileRequest getUserProfileRequest = new GetUserProfileRequest
-            {
-                Id = id
-            };
-            var response = baseHandler.PostAsync<GetUserProfileRequest, UserResponseModel>(getUserProfileRequest,ApiEndPoints.GetUserProfile).Result;
-            var userDto = JsonConvert.DeserializeObject<UserProfileModel>(response.Data);
-            return View(userDto);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(UserProfileModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var response = baseHandler.PostAsync<UserProfileModel, UserResponseModel>(model, ApiEndPoints.UpdateUserProfile).Result;
-
-                if (response.Success)
-                    return RedirectToAction("Index");
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public IActionResult Delete(string id)
-        {
-            var response = baseHandler.DeleteAsync<UserResponseModel>(ApiEndPoints.DeleteUserProfile + "?Id=" + id).Result;
-
-            if (response.Success)
+            if (ModelState.IsValid && (await _baseHandler.PostAsync<UserProfileModel, UserResponseModel>(model, ApiEndPoints.UpdateUserProfile)).Success)
                 return RedirectToAction("Index");
-            return View(response);
-        }
-        private void GetUsers(string SeacrhText)
-        {
-            ViewBag.ShowLoader = true;
-            var response = baseHandler.GetAsync<UserResponseModel>(ApiEndPoints.GetUsers + "?Skip=" + this.Skip + "&Take=" + this.Take+ "&TextToSearch="+SeacrhText).Result;
 
-            if (response.Success)
+            return View(model);
+        }
+
+        [HttpPost("delete")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if ((await _baseHandler.DeleteAsync<UserResponseModel>(ApiEndPoints.DeleteUserProfile + "?Id=" + id)).Success)
+                return RedirectToAction("Index");
+
+            return View("Error");
+        }
+
+        [HttpGet("search")]
+        public async Task<GridViewModel<UserDto>> Search(string searchTerm) => await GetUsersViewModelAsync(searchTerm);
+
+        private async Task<GridViewModel<UserDto>> GetUsersViewModelAsync(string searchText)
+        {
+            var response = await _baseHandler.GetAsync<UserResponseModel>(ApiEndPoints.GetUsers + $"?Skip={_defaultSkip}&Take={_defaultTake}&TextToSearch={searchText}");
+            if (!response.Success)
+                return new GridViewModel<UserDto> { Configuration = new GridConfiguration { HeaderText = GridHeaderText.User, Skip = 0, NoOfPages = 0 } };
+
+            var userModels = JsonConvert.DeserializeObject<List<UserDto>>(response.Data);
+            return new GridViewModel<UserDto>
             {
-                userModels = JsonConvert.DeserializeObject<List<UserDto>>(response.Data);
-                if (userModels.Count > 0)
+                Data = userModels,
+                Configuration = new GridConfiguration
                 {
-                    gridViewModel = new GridViewModel<UserDto>
-                    {
-                        Data = userModels,
-                        Configuration = new GridConfiguration
-                        {
-                            HeaderText = GridHeaderText.User,
-                            CreateButtonText=GridButtonText.User,
-                            Skip = Skip,
-                            Take = Take,
-                            NoOfPages = (int)Math.Ceiling((double)userModels.FirstOrDefault().TotalRecords / Take),
-                            DisplayFields = DisplayFieldsHelper.GetDisplayFields<UserDto>(property => property.Name != "TotalRecords" && property.Name != "Id" && property.Name != "DateRegistration" && property.Name!= "UserProfileId")
-                        }
-                    };
-                    ViewBag.ShowLoader = false;
+                    HeaderText = GridHeaderText.User,
+                    CreateButtonText = GridButtonText.User,
+                    Skip = 0,
+                    Take = _defaultTake,
+                    NoOfPages = (int)Math.Ceiling((double)userModels[0].TotalRecords / _defaultTake),
+                    DisplayFields = DisplayFieldsHelper.GetDisplayFields<UserDto>(property => property.Name != "TotalRecords" && property.Name != "Id" && property.Name != "DateRegistration" && property.Name != "UserProfileId")
                 }
-                else
-                {
-                    gridViewModel = new GridViewModel<UserDto>
-                    {
-                        Configuration=new GridConfiguration 
-                        { 
-                            HeaderText = GridHeaderText.User,
-                            Skip = 0, 
-                            NoOfPages = 0,
-                        }
-                    };
-                    ViewBag.ShowLoader = false;
-                }
-            }
+            };
         }
 
-
-        public GridViewModel<UserDto> Search(string searchTerm)
+        private async Task<UserProfileModel> GetUserProfileAsync(string id)
         {
-            GetUsers(searchTerm);
-            return gridViewModel;
+            var getUserProfileRequest = new GetUserProfileRequest { Id = id };
+            var response = await _baseHandler.PostAsync<GetUserProfileRequest, UserResponseModel>(getUserProfileRequest, ApiEndPoints.GetUserProfile);
+            return JsonConvert.DeserializeObject<UserProfileModel>(response.Data);
         }
     }
-
 }
