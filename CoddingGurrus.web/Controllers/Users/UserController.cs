@@ -67,7 +67,6 @@ namespace CoddingGurrus.web.Controllers.Users
             return View("Error");
         }
 
-        [HttpGet("search")]
         public async Task<GridViewModel<UserDto>> Search(string searchTerm) => await GetUsersViewModelAsync(searchTerm);
 
         private async Task<GridViewModel<UserDto>> GetUsersViewModelAsync(string searchText)
