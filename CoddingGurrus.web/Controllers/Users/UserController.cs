@@ -41,6 +41,7 @@ namespace CoddingGurrus.web.Controllers.Users
         {
             if (ModelState.IsValid)
             {
+                model.DateRegistration = DateTime.Now;
                 var response = baseHandler.PostAsync<UserModel,UserResponseModel>(model,ApiEndPoints.CreateUsers).Result;
 
                 if (response.Success)
