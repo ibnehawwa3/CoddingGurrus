@@ -1,4 +1,4 @@
-﻿@model CoddingGurrus.Core.Models.User.UserProfileModel;
+﻿@model CoddingGurrus.Core.Models.User.UserModel;
 <div class="page-body">
     <div class="container-xl">
         <div class="col-md-12 mb-5">
@@ -15,54 +15,61 @@
                             @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @required = "required" })
                             @Html.ValidationMessageFor(model => model.FirstName)
                         </div>
-                        <label class="col-2 col-form-label required">Last Name</label>
+                        <label class="col-2 col-form-label">Last Name</label>
                         <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.LastName,new { @class = "form-control", @required = "required" })
+                            @Html.TextBoxFor(model => model.LastName,new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.LastName)
                         </div>
                     </div>
                     <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label required">Password</label>
+                        <div class="col-md-4">
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </div>
                         <label class="col-2 col-form-label required">Email address</label>
                         <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.EmailAddress,new { @class = "form-control", @required = "required" })
-                            @Html.ValidationMessageFor(model => model.EmailAddress)
+                            @Html.TextBoxFor(model => model.Email,new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Email)
                         </div>
-                        <label class="col-2 col-form-label required">Mobile Number</label>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label">Mobile Number</label>
                         <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.MobileNumber, new { @class = "form-control", @required = "required" })
+                            @Html.TextBoxFor(model => model.MobileNumber, new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.MobileNumber)
                         </div>
-                    </div>
-                    <div class="row form-group mb-2">
-                        <label class="col-2 col-form-label required">Street Number</label>
+                        <label class="col-2 col-form-label">Street Number</label>
                         <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.StreetNumber, new { @class = "form-control", @required = "required" })
+                            @Html.TextBoxFor(model => model.StreetNumber, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.StreetNumber)
                         </div>
-                        <label class="col-2 col-form-label required">Country</label>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label">Country</label>
                         <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.Country, new { @class = "form-control", @required = "required" })
+                            @Html.TextBoxFor(model => model.Country, new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.Country)
                         </div>
-                    </div>
-                    <div class="row form-group mb-2">
-                        <label class="col-2 col-form-label required">Town</label>
+                        <label class="col-2 col-form-label">Town</label>
                         <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.Town, new { @class = "form-control", @required = "required" })
+                            @Html.TextBoxFor(model => model.Town, new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.Town)
                         </div>
-                        <label class="col-2 col-form-label required">Zip Code</label>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label">Zip Code</label>
                         <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.ZipCode, new { @class = "form-control", @required = "required" })
+                            @Html.TextBoxFor(model => model.ZipCode, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.ZipCode)
+                        </div>
+                        <label class="col-2 col-form-label">Country Code</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.CountryCode, new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.CountryCode)
                         </div>
                     </div>
                     <div class="row form-group mb-2">
-                        <label class="col-2 col-form-label required">Country Code</label>
-                        <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.CountryCode, new { @class = "form-control", @required = "required" })
-                            @Html.ValidationMessageFor(model => model.CountryCode)
-                        </div>
                     </div>
                 </div>
                 <div class="card-footer text-end">

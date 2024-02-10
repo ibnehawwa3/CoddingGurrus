@@ -46,9 +46,10 @@ namespace CoddingGurrus.web.Controllers
 
             if (!string.IsNullOrEmpty(SetTokenModel.Token))
             {
+                ViewBag.IsInvalid = false;
                 return RedirectToAction("Index", "Dashboard");
             }
-
+            ViewBag.IsInvalid=true;
             return View();
         }
 
