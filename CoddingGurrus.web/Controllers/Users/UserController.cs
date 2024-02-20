@@ -28,7 +28,8 @@ namespace CoddingGurrus.web.Controllers.Users
         public async Task<IActionResult> Index(string searchTerm = "")
         {
             var viewModel = await GetUsersViewModelAsync(searchTerm);
-            return View(viewModel);
+            ViewBag.gridViewModel = viewModel;
+            return View();
         }
 
         [HttpGet("create")]

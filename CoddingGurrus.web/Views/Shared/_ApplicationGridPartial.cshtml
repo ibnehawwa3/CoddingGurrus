@@ -1,5 +1,7 @@
 ﻿@using System.Text.RegularExpressions;
-@model CoddingGurrus.web.Helper.GridViewModel<CoddingGurrus.Core.Dtos.UserDto>
+@{
+    var Model = @ViewBag.gridViewModel;
+}
 
 <div class="col-12">
     <div class="card">
@@ -71,7 +73,7 @@
             </table>
         </div>
         <div class="card-footer d-flex align-items-center" id="paginationDiv">
-            <p class="m-0 text-muted">Showing <span>@Model.Configuration.Skip</span> to <span>@Model.Configuration.Take</span> of <span>@Model.Data.First().TotalRecords</span> entries</p>
+            <p class="m-0 text-muted">Showing <span>@Model.Configuration.Skip</span> to <span>@Model.Configuration.Take</span> of <span>@Model.Data[0].TotalRecords</span> entries</p>
             <ul class="pagination m-0 ms-auto">
                 <li class="page-item @Model.Configuration.Skip == 1 ? "disabled" : "")">
                     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
