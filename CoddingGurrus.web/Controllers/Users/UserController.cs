@@ -73,7 +73,7 @@ namespace CoddingGurrus.web.Controllers.Users
         {
             var response = await _baseHandler.GetAsync<UserResponseModel>(ApiEndPoints.GetUsers + $"?Skip={_defaultSkip}&Take={_defaultTake}&TextToSearch={searchText}");
             if (!response.Success)
-                return new GridViewModel<UserDto> { Configuration = new GridConfiguration { HeaderText = GridHeaderText.User, Skip = 0, NoOfPages = 0 } };
+                return new GridViewModel<UserDto> { Configuration = new GridConfiguration { HeaderText = GridConstants.HeaderText.User, Skip = 0, NoOfPages = 0 } };
 
             var userModels = JsonConvert.DeserializeObject<List<UserDto>>(response.Data);
             return new GridViewModel<UserDto>
@@ -81,8 +81,8 @@ namespace CoddingGurrus.web.Controllers.Users
                 Data = userModels,
                 Configuration = new GridConfiguration
                 {
-                    HeaderText = GridHeaderText.User,
-                    CreateButtonText = GridButtonText.User,
+                    HeaderText = GridConstants.HeaderText.User,
+                    CreateButtonText = GridConstants.ButtonText.User,
                     Skip = 0,
                     Take = _defaultTake,
                     NoOfPages = (int)Math.Ceiling((double)userModels[0].TotalRecords / _defaultTake),

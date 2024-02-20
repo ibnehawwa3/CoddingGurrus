@@ -11,15 +11,17 @@ namespace CoddingGurrus.web.Helper
         public const string UpdateUserProfile = "/api/UserProfile/update-profile";
         public const string DeleteUserProfile = "/api/UserProfile/delete";
         public const string Login = "api/account/login";
+        public const string GetCourses = "/api/Course/list";
+
     }
 
-    public static class GridHeaderText
-    {
-        public const string User = "User List";
-    }
+    //public static class GridHeaderText
+    //{
+    //    public const string User = "User List";
+    //}
 
-    public static class GridButtonText
-    {
-        public const string User = "Create new user";
-    }
+    //public static class GridButtonText
+    //{
+    //    public const string User = "Create new user";
+    //}
 }
