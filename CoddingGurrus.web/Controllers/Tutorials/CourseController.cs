@@ -22,7 +22,8 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         public async Task<IActionResult> Index(string searchTerm = "")
         {
             var viewModel = await GetCoursesViewModelAsync(searchTerm);
-            return View(viewModel);
+            ViewBag.gridViewModel = viewModel;
+            return View();
         }
 
         public async Task<GridViewModel<CourseDto>> Search(string searchTerm) => await GetCoursesViewModelAsync(searchTerm);
