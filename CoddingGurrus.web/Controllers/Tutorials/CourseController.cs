@@ -56,7 +56,26 @@ namespace CoddingGurrus.web.Controllers.Tutorials
             }
             return View(model);
         }
+        [HttpGet("edit")]
+        public async Task<IActionResult> Edit(string id) => View(await GetUserProfileAsync(id));
 
+        [HttpPost("edit")]
+        public async Task<IActionResult> Edit(CourseModel model)
+        {
+            if (ModelState.IsValid && (await _baseHandler.PostAsync<CourseModel, GenericResponseModel>(model, ApiEndPoints.UpdateUserProfile)).Success)
+                return RedirectToAction("Index");
+
+            return View(model);
+        }
+
+        [HttpPost("delete")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if ((await _baseHandler.DeleteAsync<GenericResponseModel>(ApiEndPoints.DeleteCourse + "?Id=" + id)).Success)
+                return RedirectToAction("Index");
+
+            return View("Error");
+        }
         public async Task<GridViewModel<CourseDto>> Search(string searchTerm) => await GetCoursesViewModelAsync(searchTerm);
 
         private async Task<GridViewModel<CourseDto>> GetCoursesViewModelAsync(string searchText)
