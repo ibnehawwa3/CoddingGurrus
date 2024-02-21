@@ -64,7 +64,20 @@ namespace CoddingGurrus.Infrastructure.CommonHelper.Handler
             }
             else
             {
-                throw new Exception($"Error communicating with API: {response.StatusCode}");
+                string errorMessage = "";
+                if (response.Content != null)
+                {
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    // Assuming BasicResponse is the type returned in error cases
+                    TResponse errorResponse = JsonConvert.DeserializeObject<TResponse>(errorContent);
+                    return errorResponse;
+                }
+                else
+                {
+                    errorMessage = $"Error communicating with API: {response.StatusCode}";
+                }
+                throw new Exception(errorMessage);
+                //throw new Exception($"Error communicating with API: {response.StatusCode}");
             }
         }
 

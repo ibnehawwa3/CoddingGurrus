@@ -5,14 +5,16 @@ namespace CoddingGurrus.web.Helper
 {
     public static class ApiEndPoints
     {
+        //user
         public const string GetUsers = "/api/User/list";
         public const string CreateUsers = "/api/Account/register";
         public const string GetUserProfile = "/api/UserProfile/get-profile";
         public const string UpdateUserProfile = "/api/UserProfile/update-profile";
         public const string DeleteUserProfile = "/api/UserProfile/delete";
         public const string Login = "api/account/login";
+        //course
         public const string GetCourses = "/api/Course/list";
-
+        public const string CreateCourse = "/api/Course/add";
     }
 
     //public static class GridHeaderText

@@ -11,7 +11,12 @@
         public static class ButtonText
         {
             public const string User = "Create new user";
-            public const string Course = "Course new user";
+            public const string Course = "Create new course";
+        }
+        public static class ControllerNames
+        {
+            public const string User = "User";
+            public const string Course = "Course";
         }
     }
 

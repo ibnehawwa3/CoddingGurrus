@@ -41,7 +41,7 @@ namespace CoddingGurrus.web.Controllers.Users
             if (ModelState.IsValid)
             {
                 model.DateRegistration = DateTime.Now;
-                if ((await _baseHandler.PostAsync<UserModel, UserResponseModel>(model, ApiEndPoints.CreateUsers)).Success)
+                if ((await _baseHandler.PostAsync<UserModel, GenericResponseModel>(model, ApiEndPoints.CreateUsers)).Success)
                     return RedirectToAction("Index");
             }
             return View(model);
@@ -53,7 +53,7 @@ namespace CoddingGurrus.web.Controllers.Users
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(UserProfileModel model)
         {
-            if (ModelState.IsValid && (await _baseHandler.PostAsync<UserProfileModel, UserResponseModel>(model, ApiEndPoints.UpdateUserProfile)).Success)
+            if (ModelState.IsValid && (await _baseHandler.PostAsync<UserProfileModel, GenericResponseModel>(model, ApiEndPoints.UpdateUserProfile)).Success)
                 return RedirectToAction("Index");
 
             return View(model);
@@ -62,7 +62,7 @@ namespace CoddingGurrus.web.Controllers.Users
         [HttpPost("delete")]
         public async Task<IActionResult> Delete(string id)
         {
-            if ((await _baseHandler.DeleteAsync<UserResponseModel>(ApiEndPoints.DeleteUserProfile + "?Id=" + id)).Success)
+            if ((await _baseHandler.DeleteAsync<GenericResponseModel>(ApiEndPoints.DeleteUserProfile + "?Id=" + id)).Success)
                 return RedirectToAction("Index");
 
             return View("Error");
@@ -72,7 +72,7 @@ namespace CoddingGurrus.web.Controllers.Users
 
         private async Task<GridViewModel<UserDto>> GetUsersViewModelAsync(string searchText)
         {
-            var response = await _baseHandler.GetAsync<UserResponseModel>(ApiEndPoints.GetUsers + $"?Skip={_defaultSkip}&Take={_defaultTake}&TextToSearch={searchText}");
+            var response = await _baseHandler.GetAsync<GenericResponseModel>(ApiEndPoints.GetUsers + $"?Skip={_defaultSkip}&Take={_defaultTake}&TextToSearch={searchText}");
             if (!response.Success)
                 return new GridViewModel<UserDto> { Configuration = new GridConfiguration { HeaderText = GridConstants.HeaderText.User, Skip = 0, NoOfPages = 0 } };
 
@@ -84,6 +84,7 @@ namespace CoddingGurrus.web.Controllers.Users
                 {
                     HeaderText = GridConstants.HeaderText.User,
                     CreateButtonText = GridConstants.ButtonText.User,
+                    ControllerName = GridConstants.ControllerNames.User,
                     Skip = 0,
                     Take = _defaultTake,
                     NoOfPages = (int)Math.Ceiling((double)userModels[0].TotalRecords / _defaultTake),
@@ -95,7 +96,7 @@ namespace CoddingGurrus.web.Controllers.Users
         private async Task<UserProfileModel> GetUserProfileAsync(string id)
         {
             var getUserProfileRequest = new GetUserProfileRequest { Id = id };
-            var response = await _baseHandler.PostAsync<GetUserProfileRequest, UserResponseModel>(getUserProfileRequest, ApiEndPoints.GetUserProfile);
+            var response = await _baseHandler.PostAsync<GetUserProfileRequest, GenericResponseModel>(getUserProfileRequest, ApiEndPoints.GetUserProfile);
             return JsonConvert.DeserializeObject<UserProfileModel>(response.Data);
         }
     }
