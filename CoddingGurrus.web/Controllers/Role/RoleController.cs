@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace CoddingGurrus.web.Controllers.Users
+namespace CoddingGurrus.web.Controllers
 {
+    [Route("Role")]
     public class RoleController : Controller
     {
         private readonly IBaseHandler _baseHandler;
@@ -28,10 +29,10 @@ namespace CoddingGurrus.web.Controllers.Users
             return View();
         }
 
-        [HttpGet("create")]
+        [HttpGet("Create")]
         public IActionResult Create() => View();
 
-        [HttpPost("create")]
+        [HttpPost("Create")]
         public async Task<IActionResult> Create(RoleModel model)
         {
             if (ModelState.IsValid)
@@ -51,7 +52,7 @@ namespace CoddingGurrus.web.Controllers.Users
             if (ModelState.IsValid && (await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.UpdateUserProfile)).Success)
                 return RedirectToAction("Index");
 
-            return View(model);
+            return View();
         }
 
         [HttpPost("delete")]
@@ -71,18 +72,22 @@ namespace CoddingGurrus.web.Controllers.Users
             if (!response.Success)
                 return new GridViewModel<RoleModel> { Configuration = new GridConfiguration { HeaderText = GridHeaderText.Role, Skip = 0, NoOfPages = 0 } };
 
-            var userModels = JsonConvert.DeserializeObject<List<UserDto>>(response.Data);
+            var userModels = JsonConvert.DeserializeObject<List<RoleModel>>(response.Data);
             return new GridViewModel<RoleModel>
             {
                 Data = userModels,
                 Configuration = new GridConfiguration
                 {
-                    HeaderText = GridHeaderText.User,
-                    CreateButtonText = GridButtonText.User,
+                    HeaderText = GridHeaderText.Role,
+                    CreateButtonText = GridButtonText.Role,
+                    CreateAction = nameof(ActionType.Create),
+                    UpdateAction = nameof(ActionType.Edit),
+                    DeleteAction = nameof(ActionType.Delete),
+                    ControllerName = nameof(ControllerName.Role),
                     Skip = 0,
                     Take = _defaultTake,
-                    NoOfPages = (int)Math.Ceiling((double)userModels[0].TotalRecords / _defaultTake),
-                    DisplayFields = DisplayFieldsHelper.GetDisplayFields<RoleModel>(property => property.Name != "TotalRecords")
+                    NoOfPages = 1,
+                    DisplayFields = DisplayFieldsHelper.GetDisplayFields<RoleModel>(property => property.Name != "TotalRecords" && property.Name != "ConcurrencyStamp" && property.Name != "NormalizedName")
                 }
             };
         }
@@ -90,7 +95,7 @@ namespace CoddingGurrus.web.Controllers.Users
         private async Task<RoleModel> GetRoleByIdAsync(int id)
         {
             var getUserProfileRequest = new GetRoleRequest { Id = id };
-            var response = await _baseHandler.PostAsync<GetRoleRequest, RoleResponseModel>(getUserProfileRequest, ApiEndPoints.GetUserProfile);
+            var response = await _baseHandler.GetByIdAsync<RoleResponseModel>(ApiEndPoints.GetRoleById,id);
             return JsonConvert.DeserializeObject<RoleModel>(response.Data);
         }
     }
