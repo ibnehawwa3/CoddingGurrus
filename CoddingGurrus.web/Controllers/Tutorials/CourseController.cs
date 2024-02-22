@@ -36,11 +36,6 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         [HttpPost("create")]
         public async Task<IActionResult> Create(CourseModel model)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    if ((await _baseHandler.PostAsync<CourseModel, GenericResponseModel>(model, ApiEndPoints.CreateCourse)).Success)
-            //        return RedirectToAction("Index");
-            //}
             if (ModelState.IsValid)
             {
                 var response = await _baseHandler.PostAsync<CourseModel, GenericResponseModel>(model, ApiEndPoints.CreateCourse);
