@@ -57,19 +57,19 @@ namespace CoddingGurrus.web.Controllers.Tutorials
             return View(model);
         }
         [HttpGet("edit")]
-        public async Task<IActionResult> Edit(string id) => View(await GetUserProfileAsync(id));
+        public async Task<IActionResult> Edit(long id) => View(await GetCourseByIdAsync(id));
 
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(CourseModel model)
         {
-            if (ModelState.IsValid && (await _baseHandler.PostAsync<CourseModel, GenericResponseModel>(model, ApiEndPoints.UpdateUserProfile)).Success)
+            if (ModelState.IsValid && (await _baseHandler.PostAsync<CourseModel, GenericResponseModel>(model, ApiEndPoints.UpdateCourse)).Success)
                 return RedirectToAction("Index");
 
             return View(model);
         }
 
         [HttpPost("delete")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(long id)
         {
             if ((await _baseHandler.DeleteAsync<GenericResponseModel>(ApiEndPoints.DeleteCourse + "?Id=" + id)).Success)
                 return RedirectToAction("Index");
@@ -99,6 +99,12 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                     DisplayFields = DisplayFieldsHelper.GetDisplayFields<CourseDto>(property => property.Name != "TotalRecords" && property.Name != "Id")
                 }
             };
+        }
+        private async Task<CourseModel> GetCourseByIdAsync(long id)
+        {
+            var idRequest = new LongIdRequest { Id = id };
+            var response = await _baseHandler.PostAsync<LongIdRequest, GenericResponseModel>(idRequest, ApiEndPoints.GetCourseById);
+            return JsonConvert.DeserializeObject<CourseModel>(response.Data);
         }
     }
 }

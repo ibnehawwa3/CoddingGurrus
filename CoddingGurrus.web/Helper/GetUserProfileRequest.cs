@@ -2,9 +2,14 @@
 
 namespace CoddingGurrus.web.Helper
 {
-    public class GetUserProfileRequest
+    public class StringIdRequest
     {
         [Required]
         public string Id { get; set; }
+    }
+    public class LongIdRequest
+    {
+        [Required]
+        public long Id { get; set; }
     }
 }

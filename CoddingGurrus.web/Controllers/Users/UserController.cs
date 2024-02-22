@@ -95,8 +95,8 @@ namespace CoddingGurrus.web.Controllers.Users
 
         private async Task<UserProfileModel> GetUserProfileAsync(string id)
         {
-            var getUserProfileRequest = new GetUserProfileRequest { Id = id };
-            var response = await _baseHandler.PostAsync<GetUserProfileRequest, GenericResponseModel>(getUserProfileRequest, ApiEndPoints.GetUserProfile);
+            var idRequest = new StringIdRequest { Id = id };
+            var response = await _baseHandler.PostAsync<StringIdRequest, GenericResponseModel>(idRequest, ApiEndPoints.GetUserProfile);
             return JsonConvert.DeserializeObject<UserProfileModel>(response.Data);
         }
     }

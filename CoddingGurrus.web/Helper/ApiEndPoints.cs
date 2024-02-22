@@ -17,6 +17,7 @@ namespace CoddingGurrus.web.Helper
         public const string CreateCourse = "/api/Course/add";
         public const string UpdateCourse = "/api/Course/update";
         public const string DeleteCourse = "/api/Course/delete";
+        public const string GetCourseById = "/api/Course/get-course";
     }
 
     //public static class GridHeaderText
