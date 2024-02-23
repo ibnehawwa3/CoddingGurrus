@@ -49,7 +49,7 @@ namespace CoddingGurrus.web.Controllers
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(RoleModel model)
         {
-            if (ModelState.IsValid && (await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.UpdateUserProfile)).Success)
+            if (ModelState.IsValid && (await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.UpdateRole)).Success)
                 return RedirectToAction("Index");
 
             return View();
@@ -58,7 +58,7 @@ namespace CoddingGurrus.web.Controllers
         [HttpPost("delete")]
         public async Task<IActionResult> Delete(string id)
         {
-            if ((await _baseHandler.DeleteAsync<RoleResponseModel>(ApiEndPoints.DeleteUserProfile + "?Id=" + id)).Success)
+            if ((await _baseHandler.DeleteAsync<RoleResponseModel>(ApiEndPoints.DeleteRole + "?Id=" + id)).Success)
                 return RedirectToAction("Index");
 
             return View("Error");

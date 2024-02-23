@@ -6,5 +6,10 @@ namespace CoddingGurrus.web.Helper
     {
         [Required]
         public int Id { get; set; }
+    } 
+    public class GetMenuRequest
+    {
+        [Required]
+        public int Id { get; set; }
     }
 }

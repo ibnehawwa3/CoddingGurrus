@@ -8,5 +8,8 @@ namespace CoddingGurrus.Core.APIResponses
 {
     public class RoleResponseModel : ResponseModel
     {
+    } 
+    public class MenuResponseModel : ResponseModel
+    {
     }
 }

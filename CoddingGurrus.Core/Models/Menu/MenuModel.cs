@@ -8,12 +8,15 @@ namespace CoddingGurrus.Core.Models.Menu
 {
     public class MenuModel
     {
+        public int? Id { get; set; } = 0;
         public string Name { get; set; }
         public string Url { get; set; }
-        public int ParentId { get; set; }
-        public int MenuOrder { get; set; }
+        public int ParentId { get; set; } = 0;
+        public int MenuOrder { get; set; } = 0;
         public string MenuImage { get; set; }
-        public bool Archived { get; set; }
-        public bool IsShow { get; set; }
+        public bool Archived { get; set; } = false;
+        public bool IsShow { get; set; } = false;
+
+        public int? TotalRecords { get; set; }
     }
 }
