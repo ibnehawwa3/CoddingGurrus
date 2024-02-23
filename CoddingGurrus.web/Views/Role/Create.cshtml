@@ -1,0 +1,29 @@
+﻿@model CoddingGurrus.Core.Models.Role.RoleModel;
+<div class="page-body">
+    <div class="container-xl">
+        <div class="col-md-12 mb-5">
+            @using (Html.BeginForm("Create", "Role", FormMethod.Post, new { @class = "card" }))
+            {
+                <div class="card-header">
+                    <h3 class="card-title">Create New Role</h3>
+                </div>
+                <div class="card-body">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row form-group mb-2">
+                        <label class="col-2 col-form-label required">Role Name</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="@Url.Action("Index","Role")" class="btn btn-danger">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
