@@ -84,6 +84,10 @@ namespace CoddingGurrus.web.Controllers.Users
                 {
                     HeaderText = GridHeaderText.User,
                     CreateButtonText = GridButtonText.User,
+                    CreateAction = nameof(ActionType.Create),
+                    UpdateAction = nameof(ActionType.Edit),
+                    DeleteAction = nameof(ActionType.Delete),
+                    ControllerName = nameof(ControllerName.User),
                     Skip = 0,
                     Take = _defaultTake,
                     NoOfPages = (int)Math.Ceiling((double)userModels[0].TotalRecords / _defaultTake),
@@ -94,8 +98,8 @@ namespace CoddingGurrus.web.Controllers.Users
 
         private async Task<UserProfileModel> GetUserProfileAsync(string id)
         {
-            var getUserProfileRequest = new GetUserProfileRequest { Id = id };
-            var response = await _baseHandler.PostAsync<GetUserProfileRequest, UserResponseModel>(getUserProfileRequest, ApiEndPoints.GetUserProfile);
+            var getUserProfileRequest = new GetByIdRequest { Id = id };
+            var response = await _baseHandler.PostAsync<GetByIdRequest, UserResponseModel>(getUserProfileRequest, ApiEndPoints.GetUserProfile);
             return JsonConvert.DeserializeObject<UserProfileModel>(response.Data);
         }
     }

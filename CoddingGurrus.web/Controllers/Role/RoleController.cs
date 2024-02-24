@@ -21,6 +21,7 @@ namespace CoddingGurrus.web.Controllers
         {
             _baseHandler = baseHandler;
         }
+
         [HttpGet]
         public async Task<IActionResult> Index(string searchTerm = "")
         {
@@ -37,7 +38,9 @@ namespace CoddingGurrus.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if ((await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.CreateUsers)).Success)
+                model.NormalizedName = "SUPERUSER";
+                model.Id = "5";
+                if ((await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.CreateRole)).Success)
                     return RedirectToAction("Index");
             }
             return View(model);
@@ -49,7 +52,7 @@ namespace CoddingGurrus.web.Controllers
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(RoleModel model)
         {
-            if (ModelState.IsValid && (await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.UpdateUserProfile)).Success)
+            if (ModelState.IsValid && (await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.UpdateRole)).Success)
                 return RedirectToAction("Index");
 
             return View();
@@ -58,22 +61,22 @@ namespace CoddingGurrus.web.Controllers
         [HttpPost("delete")]
         public async Task<IActionResult> Delete(string id)
         {
-            if ((await _baseHandler.DeleteAsync<RoleResponseModel>(ApiEndPoints.DeleteUserProfile + "?Id=" + id)).Success)
+            if ((await _baseHandler.DeleteAsync<RoleResponseModel>(ApiEndPoints.DeleteRole + "?Id=" + id)).Success)
                 return RedirectToAction("Index");
 
             return View("Error");
         }
 
-        public async Task<GridViewModel<RoleModel>> Search(string searchTerm) => await GetRolesViewModelAsync(searchTerm);
+        public async Task<GridViewModel<RoleDto>> Search(string searchTerm) => await GetRolesViewModelAsync(searchTerm);
 
-        private async Task<GridViewModel<RoleModel>> GetRolesViewModelAsync(string searchText)
+        private async Task<GridViewModel<RoleDto>> GetRolesViewModelAsync(string searchText)
         {
             var response = await _baseHandler.GetAsync<RoleResponseModel>(ApiEndPoints.GetRole);
             if (!response.Success)
-                return new GridViewModel<RoleModel> { Configuration = new GridConfiguration { HeaderText = GridHeaderText.Role, Skip = 0, NoOfPages = 0 } };
+                return new GridViewModel<RoleDto> { Configuration = new GridConfiguration { HeaderText = GridHeaderText.Role, Skip = 0, NoOfPages = 0 } };
 
-            var userModels = JsonConvert.DeserializeObject<List<RoleModel>>(response.Data);
-            return new GridViewModel<RoleModel>
+            var userModels = JsonConvert.DeserializeObject<List<RoleDto>>(response.Data);
+            return new GridViewModel<RoleDto>
             {
                 Data = userModels,
                 Configuration = new GridConfiguration
@@ -87,7 +90,7 @@ namespace CoddingGurrus.web.Controllers
                     Skip = 0,
                     Take = _defaultTake,
                     NoOfPages = 1,
-                    DisplayFields = DisplayFieldsHelper.GetDisplayFields<RoleModel>(property => property.Name != "TotalRecords" && property.Name != "ConcurrencyStamp" && property.Name != "NormalizedName")
+                    DisplayFields = DisplayFieldsHelper.GetDisplayFields<RoleDto>(property => property.Name != "TotalRecords" && property.Name != "ConcurrencyStamp" && property.Name != "NormalizedName")
                 }
             };
         }
