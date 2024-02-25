@@ -2,11 +2,9 @@
 using CoddingGurrus.Core.Dtos;
 using CoddingGurrus.Core.Interface;
 using CoddingGurrus.Core.Models.Course;
-using CoddingGurrus.Core.Models.User;
 using CoddingGurrus.web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using static CoddingGurrus.web.Helper.GridConstants;
 
 namespace CoddingGurrus.web.Controllers.Tutorials
 {
