@@ -16,8 +16,8 @@ namespace CoddingGurrus.web.Controllers.Users
     public class UserController : Controller
     {
         private readonly IBaseHandler _baseHandler;
-        private readonly int _defaultTake = 10;
-        private readonly int _defaultSkip = 1;
+        private int _defaultTake = 10;
+        private int _defaultSkip = 1;
 
         public UserController(IBaseHandler baseHandler)
         {
@@ -29,6 +29,7 @@ namespace CoddingGurrus.web.Controllers.Users
         {
             var viewModel = await GetUsersViewModelAsync(searchTerm);
             ViewBag.gridViewModel = viewModel;
+            ViewBag.pageSize = viewModel.Configuration.Skip;
             return View();
         }
 
@@ -68,6 +69,12 @@ namespace CoddingGurrus.web.Controllers.Users
             return View("Error");
         }
 
+        public async Task<GridViewModel<UserDto>> HandlePagination(int pageSize)
+        {
+            this._defaultSkip = pageSize;
+            ViewBag.pageSize = pageSize;
+            return await GetUsersViewModelAsync(string.Empty);
+        }
         public async Task<GridViewModel<UserDto>> Search(string searchTerm) => await GetUsersViewModelAsync(searchTerm);
 
         private async Task<GridViewModel<UserDto>> GetUsersViewModelAsync(string searchText)
@@ -88,7 +95,7 @@ namespace CoddingGurrus.web.Controllers.Users
                     UpdateAction = nameof(ActionType.Edit),
                     DeleteAction = nameof(ActionType.Delete),
                     ControllerName = nameof(ControllerName.User),
-                    Skip = 0,
+                    Skip = this._defaultSkip,
                     Take = _defaultTake,
                     NoOfPages = (int)Math.Ceiling((double)userModels[0].TotalRecords / _defaultTake),
                     DisplayFields = DisplayFieldsHelper.GetDisplayFields<UserDto>(property => property.Name != "TotalRecords" && property.Name != "Id" && property.Name != "DateRegistration" && property.Name != "UserProfileId")
