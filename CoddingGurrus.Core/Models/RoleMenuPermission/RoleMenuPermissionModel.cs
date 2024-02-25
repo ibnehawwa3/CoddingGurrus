@@ -9,7 +9,7 @@ namespace CoddingGurrus.Core.Models.RoleMenuPermission
     public class RoleMenuPermissionModel
     {
         public long Id { get; set; }
-        public long RoleId { get; set; }
+        public string RoleId { get; set; }
         public string? MenuName { get; set; }
         public long MenuId { get; set; }
         public bool Add { get; set; }

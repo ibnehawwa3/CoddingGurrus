@@ -38,8 +38,7 @@ namespace CoddingGurrus.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.NormalizedName = "SUPERUSER";
-                model.Id = "5";
+                model.Id = Guid.NewGuid();
                 if ((await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.CreateRole)).Success)
                     return RedirectToAction("Index");
             }
@@ -47,7 +46,7 @@ namespace CoddingGurrus.web.Controllers
         }
 
         [HttpGet("edit")]
-        public async Task<IActionResult> Edit(int id) => View(await GetRoleByIdAsync(id));
+        public async Task<IActionResult> Edit(string id) => View(await GetRoleByIdAsync(id));
 
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(RoleModel model)
@@ -95,10 +94,9 @@ namespace CoddingGurrus.web.Controllers
             };
         }
 
-        private async Task<RoleModel> GetRoleByIdAsync(int id)
+        private async Task<RoleModel> GetRoleByIdAsync(string id)
         {
-            var getUserProfileRequest = new GetRoleRequest { Id = id };
-            var response = await _baseHandler.GetByIdAsync<RoleResponseModel>(ApiEndPoints.GetRoleById,id);
+            var response = await _baseHandler.GetByGuidIdAsync<RoleResponseModel>(ApiEndPoints.GetRoleById,id);
             return JsonConvert.DeserializeObject<RoleModel>(response.Data);
         }
     }

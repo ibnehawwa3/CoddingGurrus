@@ -42,7 +42,7 @@ namespace CoddingGurrus.web.Controllers.RoleMenuPermission
         {
             List<RoleMenuPermissionModel> roleMenuPermissionModels = new List<RoleMenuPermissionModel>();
             roleMenuPermissionModels = await GetRoleMenuPermissionViewModelAsync(RoleId);
-            roleMenuPermissionModels.ForEach(item => item.RoleId = int.Parse(RoleId));
+            roleMenuPermissionModels.ForEach(item => item.RoleId = RoleId);
             return View("Index", roleMenuPermissionModels);
         }
 

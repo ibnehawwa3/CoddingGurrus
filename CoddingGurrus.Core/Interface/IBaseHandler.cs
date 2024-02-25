@@ -12,5 +12,6 @@ namespace CoddingGurrus.Core.Interface
         Task<TResponse> GetAsync<TResponse>(string apiEndpoint);
         Task<TResponse> DeleteAsync<TResponse>(string apiEndpoint);
         Task<TResponse> GetByIdAsync<TResponse>(string apiEndpoint, int id);
+        Task<TResponse> GetByGuidIdAsync<TResponse>(string apiEndpoint, string id);
     }
 }
