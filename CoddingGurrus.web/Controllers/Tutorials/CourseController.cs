@@ -83,9 +83,15 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                 Data = courseModels,
                 Configuration = new GridConfiguration
                 {
-                    HeaderText = GridConstants.ButtonText.Course,
-                    CreateButtonText = GridConstants.ButtonText.Course,
-                    ControllerName = GridConstants.ControllerNames.Course,
+                    HeaderText = GridHeaderText.Course,
+                    CreateButtonText = GridButtonText.Course,
+                    CreateAction = nameof(ActionType.Create),
+                    UpdateAction = nameof(ActionType.Edit),
+                    DeleteAction = nameof(ActionType.Delete),
+                    ControllerName = nameof(ControllerName.Course),
+                    //HeaderText = GridConstants.ButtonText.Course,
+                    //CreateButtonText = GridConstants.ButtonText.Course,
+                    //ControllerName = GridConstants.ControllerNames.Course,
                     Skip = 0,
                     Take = _defaultTake,
                     NoOfPages = (int)Math.Ceiling((double)courseModels[0].TotalRecords / _defaultTake),

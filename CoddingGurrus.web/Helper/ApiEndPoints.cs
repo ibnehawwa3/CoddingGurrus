@@ -38,6 +38,7 @@ namespace CoddingGurrus.web.Helper
         public const string User = "User List";
         public const string Role = "Role List";
         public const string Menu = "Menu List";
+        public const string Course = "Course List";
     }
 
 
@@ -54,7 +55,8 @@ namespace CoddingGurrus.web.Helper
     {
         Role,
         User,
-        Menu
+        Menu,
+        Course
     }
 
     public static class GridButtonText
@@ -62,5 +64,6 @@ namespace CoddingGurrus.web.Helper
         public const string User = "Create new user";
         public const string Role = "Create new role";
         public const string Menu = "Create new menu";
+        public const string Course = "Create new course";
     }
 }
