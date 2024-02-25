@@ -21,7 +21,6 @@ namespace CoddingGurrus.web.Helper
         public string DeleteAction { get; set; }
         public string CreateButtonText { get; set; }
         public bool ShowHeaders { get; set; }
-        public string ControllerName { get; set; }
         public List<string> DisplayFields { get; set; }
     }
 
