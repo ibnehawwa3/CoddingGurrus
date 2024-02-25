@@ -39,7 +39,7 @@
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row order-md-last">
-                    <div class="nav-item d-none d-md-flex me-3">
+                   @* <div class="nav-item d-none d-md-flex me-3">
                         <div class="btn-list">
                             <a href="#" class="btn" target="_blank" rel="noreferrer">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/brand-github -->
@@ -52,7 +52,7 @@
                                 Sponsor
                             </a>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="d-none d-md-flex">
                         <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip"
                            data-bs-placement="bottom">
@@ -175,7 +175,7 @@
                     <div class="container-xl">
                         <ul class="navbar-nav">
                             <li class="nav-item active" onclick="activateNavItem(this)">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="/Dashboard/Index/">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
@@ -192,7 +192,7 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /><path d="M16 5.25l-8 4.5" /></svg>
                                     </span>
                                     <span class="nav-link-title">
-                                        User
+                                        Administration
                                     </span>
                                 </a>
                                 <div class="dropdown-menu">
@@ -307,7 +307,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="nav-item">
+                            @*<li class="nav-item">
                                 <a class="nav-link" href="#">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
@@ -317,8 +317,102 @@
                                         Form elements
                                     </span>
                                 </a>
-                            </li>
+                            </li>*@
                             <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#navbar-extra" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z" /></svg>
+                                    </span>
+                                    <span class="nav-link-title">
+                                        Learning Resources
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu">
+                                    <div class="dropdown-menu-columns">
+                                        <div class="dropdown-menu-column">
+                                            <a class="dropdown-item" href="@Url.ActionLink("Index","Course")">
+                                                Course List
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Cookie banner
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Activity
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Gallery
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Invoice
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Search results
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Pricing cards
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Pricing table
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                FAQ
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                            <a class="dropdown-item" href="/User/Index/">
+                                                Users
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                License
+                                            </a>
+                                        </div>
+                                        <div class="dropdown-menu-column">
+                                            <a class="dropdown-item" href="#">
+                                                Logs
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Music
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Photogrid
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Tasks
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Uptime monitor
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Widgets
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Wizard
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Settings
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Trial ended
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Job listing
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Page loader
+                                                <span class="badge badge-sm bg-green-lt text-uppercase ms-auto">New</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            @*<li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#navbar-extra" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/star -->
@@ -411,7 +505,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </li>
+                            </li>*@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#navbar-layout" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -1300,7 +1394,6 @@
                 localStorage.setItem('selectedNavItem', activeNavLinkTitle.textContent.trim());
             }
         }
-        debugger
         @if (ViewBag.ClearLocalStorage != null && ViewBag.ClearLocalStorage)
         {
            <script>

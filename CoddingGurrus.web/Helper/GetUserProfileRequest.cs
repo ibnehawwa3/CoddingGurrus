@@ -7,4 +7,9 @@ namespace CoddingGurrus.web.Helper
         [Required]
         public string Id { get; set; }
     }
+    public class LongIdRequest
+    {
+        [Required]
+        public long Id { get; set; }
+    }
 }

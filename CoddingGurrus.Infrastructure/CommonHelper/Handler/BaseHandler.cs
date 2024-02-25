@@ -1,13 +1,8 @@
 ﻿using CoddingGurrus.Core.APIResponses;
 using CoddingGurrus.Core.Interface;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CoddingGurrus.Infrastructure.CommonHelper.Handler
 {
@@ -70,7 +65,20 @@ namespace CoddingGurrus.Infrastructure.CommonHelper.Handler
             }
             else
             {
-                throw new Exception($"Error communicating with API: {response.StatusCode}");
+                string errorMessage = "";
+                if (response.Content != null)
+                {
+                    string errorContent = await response.Content.ReadAsStringAsync();
+                    // Assuming BasicResponse is the type returned in error cases
+                    TResponse errorResponse = JsonConvert.DeserializeObject<TResponse>(errorContent);
+                    return errorResponse;
+                }
+                else
+                {
+                    errorMessage = $"Error communicating with API: {response.StatusCode}";
+                }
+                throw new Exception(errorMessage);
+                //throw new Exception($"Error communicating with API: {response.StatusCode}");
             }
         }
 
