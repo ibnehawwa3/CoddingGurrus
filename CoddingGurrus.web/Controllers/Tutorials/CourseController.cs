@@ -36,7 +36,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         {
             if (ModelState.IsValid)
             {
-                var response = await _baseHandler.PostAsync<CourseModel, GenericResponseModel>(model, ApiEndPoints.CreateCourse);
+                var response = await _baseHandler.PostAsync<CourseModel, UserResponseModel>(model, ApiEndPoints.CreateCourse);
 
                 if (response.Success)
                 {
@@ -55,7 +55,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(CourseModel model)
         {
-            if (ModelState.IsValid && (await _baseHandler.PostAsync<CourseModel, GenericResponseModel>(model, ApiEndPoints.UpdateCourse)).Success)
+            if (ModelState.IsValid && (await _baseHandler.PostAsync<CourseModel, UserResponseModel>(model, ApiEndPoints.UpdateCourse)).Success)
                 return RedirectToAction("Index");
 
             return View(model);
@@ -64,7 +64,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         [HttpPost("delete")]
         public async Task<IActionResult> Delete(long id)
         {
-            if ((await _baseHandler.DeleteAsync<GenericResponseModel>(ApiEndPoints.DeleteCourse + "?Id=" + id)).Success)
+            if ((await _baseHandler.DeleteAsync<UserResponseModel>(ApiEndPoints.DeleteCourse + "?Id=" + id)).Success)
                 return RedirectToAction("Index");
 
             return View("Error");
@@ -73,7 +73,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
 
         private async Task<GridViewModel<CourseDto>> GetCoursesViewModelAsync(string searchText)
         {
-            var response = await _baseHandler.GetAsync<GenericResponseModel>(ApiEndPoints.GetCourses + $"?Skip={_defaultSkip}&Take={_defaultTake}&TextToSearch={searchText}");
+            var response = await _baseHandler.GetAsync<UserResponseModel>(ApiEndPoints.GetCourses + $"?Skip={_defaultSkip}&Take={_defaultTake}&TextToSearch={searchText}");
             if (!response.Success)
                 return new GridViewModel<CourseDto> { Configuration = new GridConfiguration { HeaderText = GridConstants.ButtonText.Course, Skip = 0, NoOfPages = 0 } };
 
@@ -96,7 +96,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         private async Task<CourseModel> GetCourseByIdAsync(long id)
         {
             var idRequest = new LongIdRequest { Id = id };
-            var response = await _baseHandler.PostAsync<LongIdRequest, GenericResponseModel>(idRequest, ApiEndPoints.GetCourseById);
+            var response = await _baseHandler.PostAsync<LongIdRequest, UserResponseModel>(idRequest, ApiEndPoints.GetCourseById);
             return JsonConvert.DeserializeObject<CourseModel>(response.Data);
         }
     }

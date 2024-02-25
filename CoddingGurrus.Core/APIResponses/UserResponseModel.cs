@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CoddingGurrus.Core.APIResponses
 {
-    public class GenericResponseModel : ResponseModel
+    public class UserResponseModel : ResponseModel
     {
 
     }
