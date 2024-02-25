@@ -2,7 +2,7 @@
 
 namespace CoddingGurrus.web.Helper
 {
-    public class StringIdRequest
+    public class GetByIdRequest
     {
         [Required]
         public string Id { get; set; }

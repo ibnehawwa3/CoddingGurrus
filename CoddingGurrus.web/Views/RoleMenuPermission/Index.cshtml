@@ -1,0 +1,57 @@
+﻿@model List<CoddingGurrus.Core.Models.RoleMenuPermission.RoleMenuPermissionModel>
+
+<div class="page-body">
+    <div class="container-xl">
+        @using (Html.BeginForm("create", "RoleMenuPermission", FormMethod.Post))
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Role Permission</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table" id="dataTable">
+                        <tr>
+                            <th>Menu</th>
+                            <th>Access</th>
+                            <th>Add</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                @Html.HiddenFor(modelItem => Model[i].RoleId)
+                                @Html.HiddenFor(modelItem => Model[i].MenuId)
+                                <td>@Model[i].MenuName</td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        @Html.CheckBoxFor(modelItem => Model[i].Access, new { id = $"toggleAccess_{Model[i].Id}", @class = "form-check-input" })
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        @Html.CheckBoxFor(modelItem => Model[i].Add, new { id = $"toggleAdd_{Model[i].Id}", @class = "form-check-input" })
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        @Html.CheckBoxFor(modelItem => Model[i].Update, new { id = $"toggleUpdate_{Model[i].Id}", @class = "form-check-input" })
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        @Html.CheckBoxFor(modelItem => Model[i].Delete, new { id = $"toggleDelete_{Model[i].Id}", @class = "form-check-input" })
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <a href="@Url.Action("Index","RoleMenuPermission")" class="btn btn-danger">Cancel</a>
+                    <button id="submitBtn" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

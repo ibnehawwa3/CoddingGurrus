@@ -1,13 +1,17 @@
 ﻿@using System.Text.RegularExpressions;
 @{
     var Model = @ViewBag.gridViewModel;
+    string UpdateAction = Model.Configuration.UpdateAction;
+    string CreateAction = Model.Configuration.CreateAction;
+    string DeleteAction = Model.Configuration.DeleteAction;
+    string ControllerName = Model.Configuration.ControllerName;
 }
 
 <div class="col-12">
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <h3 class="card-title">@Model.Configuration.HeaderText</h3>
-            <a asp-controller="@Model.Configuration.ControllerName" asp-action="Create" class="btn btn-primary d-none d-sm-inline-block">
+            <a asp-controller="@Model.Configuration.ControllerName" asp-action="@Model.Configuration.CreateAction" class="btn btn-primary d-none d-sm-inline-block">
                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                 @Model.Configuration.CreateButtonText
@@ -18,14 +22,14 @@
                 <div class="text-muted">
                     Show
                     <div class="mx-2 d-inline-block">
-                        <input type="text" class="form-control form-control-sm" value="8" size="3" aria-label="Invoices count">
+                        <input type="text" class="form-control" value="8" size="3" aria-label="Invoices count">
                     </div>
                     entries
                 </div>
                 <div class="ms-auto text-muted">
                     Search:
                     <div class="ms-2 d-inline-block">
-                        <input type="text" id="searchInput" class="form-control form-control-sm" aria-label="Search invoice">
+                        <input type="text" id="searchInput" placeholder="Search..." class="form-control" aria-label="Search invoice">
                     </div>
                 </div>
             </div>
@@ -34,11 +38,6 @@
             <table class="table card-table table-vcenter text-nowrap datatable" id="#userListTable">
                 <thead>
                     <tr>
-                        @*<th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
-                        <th class="w-1">
-                            No. <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sm icon-thick" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M6 15l6 -6l6 6" /></svg>
-                        </th>*@
                         @foreach (var fileds in Model.Configuration.DisplayFields)
                         {
                             <th>@Regex.Replace(fileds, "([a-z])([A-Z])", "$1 $2")</th>
@@ -58,10 +57,7 @@
                                 <span class="dropdown">
                                     <button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Actions</button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        @* <a class="dropdown-item" href="@Url.Action("Edit","User")?id=@item.Id">
-                                            Edit
-                                        </a> *@
-                                        <a class="dropdown-item" href="@Url.Action("Edit", (string)@Model.Configuration.ControllerName, new { id = item.Id })">
+                                        <a class="dropdown-item" href="@Url.Action(UpdateAction,ControllerName)?id=@item.Id">
                                             Edit
                                         </a>
                                         <a class="dropdown-item" id="deleteItem" data-bs-toggle="modal" href="#" data-bs-target="#modal-danger" data-item-id="@item.Id">
@@ -78,9 +74,8 @@
         <div class="card-footer d-flex align-items-center" id="paginationDiv">
             <p class="m-0 text-muted">Showing <span>@Model.Configuration.Skip</span> to <span>@Model.Configuration.Take</span> of <span>@Model.Data[0].TotalRecords</span> entries</p>
             <ul class="pagination m-0 ms-auto">
-                <li class="page-item @Model.Configuration.Skip == 1 ? "disabled" : "")">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                <li class="page-item" @(Model.Configuration.Skip == 1 ? " disabled" : "" )">
+                    <a class="page-link" id="previousClick" href="#" tabindex="-1" aria-disabled="true">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 6l-6 6l6 6" /></svg>
                         prev
                     </a>
@@ -88,14 +83,14 @@
 
                 @for (int i = 1; i <= Model.Configuration.NoOfPages; i++)
                 {
-                    <li class="page-item @(i == Model.Configuration.Skip ? "active" : "")">
+                    <li class="page-item @(i == Model.Configuration.Skip? "active" : "")">
                         <a class="page-link" href="#">@i</a>
                     </li>
                 }
 
                 <li class="page-item @(Model.Configuration.Skip == Model.Configuration.NoOfPages ? "disabled" : "")">
-                    <a class="page-link" href="#">
-                        next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                    <a class="page-link" id="nextClick" href="#">
+                        next 
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 6l6 6l-6 6" /></svg>
                     </a>
                 </li>
@@ -103,7 +98,7 @@
         </div>
     </div>
 </div>
-
+<input type="hidden" id="currentSkip" />
 <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -125,7 +120,7 @@
                             </a>
                         </div>
                         <div class="col">
-                            <a href="href="#" id="deleteConfirm" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                            <a href="href=" #" id="deleteConfirm" class="btn btn-danger w-100" data-bs-dismiss="modal">
                                 Delete
                             </a>
                         </div>
@@ -140,10 +135,111 @@
 
 <script>
     $(document).ready(function () {
+
+        var pageSize;
+
+        $(document).on('click', '#previousClick', function (event) {
+            event.preventDefault();
+            var currentSkipValue = parseInt($('#currentSkip').val(), 0);
+            if (currentSkipValue > 1) {
+                var pageSize = currentSkipValue - 1;
+                pagination(pageSize);
+            }
+        });
+
+
+        $(document).on('click', '#nextClick', function (event) {
+            event.preventDefault();
+            if (@Model.Configuration.Skip < @Model.Configuration.NoOfPages) {
+                pageSize = @Model.Configuration.Skip + 1;
+                pagination(pageSize);
+            }
+        });
+
+        // Attach click event handler to the previous button
+        $("#previousClick").on('click', function (e) {
+            debugger
+            e.preventDefault(); // Prevent the default behavior of the anchor link
+            if (@Model.Configuration.Skip > 1) {
+                var pageSize = @ViewBag.pageSize - 1;
+                pagination(pageSize);
+            }
+        });
+
+        function pagination(pageSize) {
+            debugger
+            var controllerName = '@Model.Configuration.ControllerName';
+            $.ajax({
+                url: "/" + controllerName + "/HandlePagination",
+                type: "GET",
+                data: { pageSize: pageSize },
+                success: function (data) {
+                    debugger
+                    $(".pagination").find("li.page-item").remove();
+
+                    var paginationUl = $('<ul class="pagination m-0 ms-auto"></ul>');
+
+                    // Add the previous button
+                    var previousClass = (data.configuration.skip == 1) ? "disabled" : "";
+                    var previousButton = $('<li class="page-item ' + previousClass + '"></li>');
+                    var previousLink = $('<a class="page-link" id="previousClick" href="#"></a>');
+                    previousLink.append('<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M15 6l-6 6l6 6" /></svg>prev');
+                    previousButton.append(previousLink);
+                    paginationUl.append(previousButton);
+
+                    // Add page items
+                    for (var i = 1; i <= data.configuration.noOfPages; i++) {
+                        var activeClass = (i == data.configuration.skip) ? "active" : "";
+                        var pageItem = $('<li class="page-item ' + activeClass + '"></li>');
+                        var pageLink = $('<a class="page-link" href="#">' + i + '</a>');
+                        pageItem.append(pageLink);
+                        paginationUl.append(pageItem);
+                    }
+
+                    // Add the next button
+                    var nextClass = (data.configuration.skip == data.configuration.noOfPages) ? "disabled" : "";
+                    var nextButton = $('<li class="page-item ' + nextClass + '"></li>');
+                    var nextLink = $('<a class="page-link" id="nextClick" href="#"></a>');
+                    nextLink.append('next ');
+                    nextLink.append('<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 6l6 6l-6 6" /></svg>');
+                    nextButton.append(nextLink);
+                    paginationUl.append(nextButton);
+
+                    $('#currentSkip').val(data.configuration.skip);
+
+                    // Append the pagination element to the specified div with id "paginationDiv"
+                    $("#paginationDiv").empty().append(paginationUl);
+                    var element = document.getElementById("paginationDiv");
+                    if (data.configuration.skip > 0) {
+                        if (element) {
+                            element.style.display = "block";
+                        }
+                    }
+                    else {
+                        element.style.display = "none !important";
+                    }
+
+                    var updatedModel = data;
+                    var displayFieldsArray = updatedModel;
+                    if (displayFieldsArray) {
+                        updateGrid(updatedModel);
+                    } else {
+                        console.error("displayFields is not an array or is undefined.");
+                    }
+                },
+
+                error: function () {
+                    console.log("Error during AJAX request");
+                }
+            });
+        }
+
+
         $("#searchInput").on('input', function () {
+            var controllerName = '@Model.Configuration.ControllerName';
             var searchTerm = $(this).val();
             $.ajax({
-                url: "/User/Search",
+                url: "/" + controllerName + "/Search",
                 type: "GET",
                 data: { searchTerm: searchTerm },
                 success: function (data) {
@@ -151,10 +247,10 @@
                     var element = document.getElementById("paginationDiv");
                     if (data.configuration.skip > 0) {
                         if (element) {
-                            element.style.display = "block"; 
+                            element.style.display = "block";
                         }
                     }
-                    else{
+                    else {
                         element.style.display = "none !important";
                     }
 
@@ -179,7 +275,7 @@
 
             $.each(dataModel.data, function (index, item) {
                 var row = $('<tr>');
-                
+
                 dataModel.configuration.displayFields.forEach(field => {
                     const modifiedStr = field.charAt(0).toLowerCase() + field.slice(1);
                     if (modifiedStr in item) {
@@ -193,7 +289,7 @@
                     '<span class="dropdown">' +
                     '<button class="btn dropdown-toggle align-text-top" data-bs-boundary="viewport" data-bs-toggle="dropdown">Actions</button>' +
                     '<div class="dropdown-menu dropdown-menu-end">' +
-                    '<a class="dropdown-item" href="@Url.Action("Edit","User")?id=' + item.id + '">Edit</a>' +
+                    '<a class="dropdown-item" href="@Url.Action("Edit", "User")?id=' + item.id + '">Edit</a>' +
                     '<a class="dropdown-item" id="deleteItem" data-bs-toggle="modal" href="#" data-bs-target="#modal-danger" data-item-id="' + item.id + '">Delete</a>' +
                     '</div>' +
                     '</span>' +
@@ -214,14 +310,14 @@
 
 
     $("#deleteConfirm").click(function () {
-        var id=$("#Id").val();
+        var id = $("#Id").val();
         debugger
         $.ajax({
-            url: '@Url.Action("Delete", (string)@Model.Configuration.ControllerName)',
+            url: '@Url.Action(DeleteAction, ControllerName)',
             type: 'POST',
             data: { id: id },
             success: function (response) {
-                location.reload(); 
+                location.reload();
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
