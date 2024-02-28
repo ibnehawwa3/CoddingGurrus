@@ -71,8 +71,7 @@ namespace CoddingGurrus.web.Helper
         Role,
         User,
         Menu,
-        Course,
-        Topics
+        Topics,
         Course,
         Content
     }
