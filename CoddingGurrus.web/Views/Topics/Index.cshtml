@@ -1,0 +1,9 @@
+﻿@model CoddingGurrus.web.Helper.GridViewModel<CoddingGurrus.Core.Dtos.TopicsDto>
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="page-body">
+    <div class="container-xl">
+        @await Html.PartialAsync("_ApplicationGridPartial")
+    </div>
+</div>

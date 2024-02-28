@@ -13,6 +13,7 @@
             public const string User = "Create new user";
             public const string Course = "Create new course";
             public const string Content = "Create new content";
+            public const string Topics = "Create new topics";
         }
         public static class ControllerNames
         {

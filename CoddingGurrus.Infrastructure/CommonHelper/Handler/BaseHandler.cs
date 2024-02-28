@@ -40,7 +40,7 @@ namespace CoddingGurrus.Infrastructure.CommonHelper.Handler
             return await HandleResponse<TResponse>(response);
         }
 
-        public async Task<TResponse> GetByIdAsync<TResponse>(string apiEndpoint, int id)
+        public async Task<TResponse> GetByIdAsync<TResponse>(string apiEndpoint, long id)
         {
             var response = await httpClient.GetAsync(ApiUri.Info_API.APIUrl + apiEndpoint +"?Id="+id);
 
