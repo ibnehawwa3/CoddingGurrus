@@ -31,6 +31,13 @@ namespace CoddingGurrus.web.Helper
         public const string UpdateCourse = "/api/Course/update";
         public const string DeleteCourse = "/api/Course/delete";
         public const string GetCourseById = "/api/Course/get-course";
+
+        //topics
+        public const string GetTopics = "/api/Topic/list";
+        public const string CreateTopics = "/api/Topic/add";
+        public const string UpdateTopics = "/api/Topic/update";
+        public const string DeleteTopics= "/api/Topic/delete";
+        public const string GetTopicsById = "/api/Topic/get-topic";
     }
 
     public static class GridHeaderText
@@ -39,6 +46,7 @@ namespace CoddingGurrus.web.Helper
         public const string Role = "Role List";
         public const string Menu = "Menu List";
         public const string Course = "Course List";
+        public const string Topics = "Topics List";
     }
 
 
@@ -56,7 +64,8 @@ namespace CoddingGurrus.web.Helper
         Role,
         User,
         Menu,
-        Course
+        Course,
+        Topics
     }
 
     public static class GridButtonText
@@ -65,5 +74,6 @@ namespace CoddingGurrus.web.Helper
         public const string Role = "Create new role";
         public const string Menu = "Create new menu";
         public const string Course = "Create new course";
+        public const string Topics = "Create new topics";
     }
 }

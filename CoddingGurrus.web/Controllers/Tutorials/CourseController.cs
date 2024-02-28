@@ -44,7 +44,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                 }
                 else
                 {
-                    ModelState.AddModelError("", response.ErrorMessage); // Add error message to model state
+                    ModelState.AddModelError("", response.ErrorMessage);
                 }
             }
             return View(model);
