@@ -1,46 +1,34 @@
 ﻿@model CoddingGurrus.Core.Models.Tutorials.ContentModel
-
-@{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h1>Edit</h1>
-
-<h4>ContentModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" class="form-control" />
-                <span asp-validation-for="Text" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TopicId" class="control-label"></label>
-                <input asp-for="TopicId" class="form-control" />
-                <span asp-validation-for="TopicId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="page-body">
+    <div class="container-xl">
+        <div class="col-md-12 mb-5">
+            @using (Html.BeginForm("Edit", "Content", FormMethod.Post, new { @class = "card" }))
+            {
+                <div class="card-header">
+                    <h3 class="card-title">Edit Content</h3>
+                </div>
+                <div class="card-body">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row form-group mb-2">
+                        <label class="col-1 col-form-label required">Name</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Title)
+                        </div>
+                        <label class="col-1 col-form-label">Description</label>
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(model => model.Text, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Text)
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="@Url.Action("Index","Course")" class="btn btn-danger">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            }
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
