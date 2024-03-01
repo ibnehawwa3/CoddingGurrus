@@ -2,6 +2,8 @@
 @if (!ViewData.ModelState.IsValid)
 {
     <div id="errorMessage" style="display:none;">@Html.Raw(ViewData.ModelState[""].Errors.First().ErrorMessage)</div>
+    var topics = ViewBag.Topics as List<SelectListItem> ?? new List<SelectListItem>();
+}
 }
 <div class="page-body">
     <div class="container-xl">
@@ -15,16 +17,30 @@
                     <div class="row form-group mb-2">
                         <label class="col-1 col-form-label required">Name</label>
                         <div class="col-md-4">
-                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @required = "required" })
+                            @Html.DropDownList("CourseId", ViewBag.Course as SelectList, "Select Course", new { @class = "form-control", @id = "courseDropdown" })
                             @Html.ValidationMessageFor(model => model.Title)
                         </div>
-                        <label class="col-1 col-form-label">Description</label>
-                        <div class="col-md-6">
-                            @Html.TextBoxFor(model => model.Text,new { @class = "form-control"})
-                            @Html.ValidationMessageFor(model => model.Text)
+                        <label class="col-1 col-form-label required">Name</label>
+                        <div class="col-md-4">
+                            <select id="topicDropdown" class="form-control">
+                                <option value="">Select Topic</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.TopicId)
                         </div>
                     </div>
                     <div class="row form-group mb-2">
+                        <label class="col-1 col-form-label required">Name</label>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.Title)
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <label class="col-1 col-form-label">Description</label>
+                        <div class="col-md-6">
+                            @Html.TextAreaFor(model => model.Text, new { @class = "form-control", @id = "description" })
+                            @Html.ValidationMessageFor(model => model.Text)
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer text-end">
@@ -35,13 +51,42 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.js"></script>
+@* <script src="~/lib/jquery/dist/jquery.js"></script> *@
+
 <script>
     $(document).ready(function () {
         var errorMessage = $('#errorMessage').text();
         if (errorMessage.length > 0) {
             alert(errorMessage);
         }
+
+        $('#courseDropdown').change(function () {
+            debugger
+            var selectedCourseId = $(this).val();
+            $.ajax({
+                url: '/Content/GetTopicDropdownByCourseId',
+                type: "GET",
+                data: { courseId: selectedCourseId },
+                success: function (data) {
+                    debugger
+
+                    console.log(data);
+                    debugger
+                    $('#topicDropdown').empty();
+                    debugger
+                    $.each(data, function (index, item) {
+                        $('#topicDropdown').append($('<option>').val(item.Id).text(item.Name));
+                    });
+                },
+
+                error: function () {
+                    console.log("Error during AJAX request");
+                }
+            });
+        });
     });
+
+    CKEDITOR.replace('description');
 </script>

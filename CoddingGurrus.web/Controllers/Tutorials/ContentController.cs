@@ -1,9 +1,11 @@
 ﻿using CoddingGurrus.Core.APIResponses;
+using CoddingGurrus.Core.Dtos;
 using CoddingGurrus.Core.Dtos.Tutorials;
 using CoddingGurrus.Core.Interface;
 using CoddingGurrus.Core.Models.Tutorials;
 using CoddingGurrus.web.Helper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 
 namespace CoddingGurrus.web.Controllers.Tutorials
@@ -28,8 +30,34 @@ namespace CoddingGurrus.web.Controllers.Tutorials
             return View();
         }
 
+
+        [HttpGet("GetTopicDropdownByCourseId")]
+        public async Task<ActionResult> GetTopicDropdownByCourseId(long courseId)
+        {
+            List <DropDownDto> dropDownDtos = new List<DropDownDto>();
+            var topicResponse =await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetTopicDropDownByCourseId+ "?courseId=" + courseId );
+            if (topicResponse.Success)
+            {
+                dropDownDtos = JsonConvert.DeserializeObject<List<DropDownDto>>(topicResponse.Data);
+            }
+
+            return Json(dropDownDtos, System.Web.Mvc.JsonRequestBehavior.AllowGet);
+        }
+
+
+
         [HttpGet("create")]
-        public IActionResult Create() => View();
+        public async Task<IActionResult> Create()
+        {
+            var courseResponse = await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetCourseDropDown);
+            if (courseResponse.Success)
+            {
+                var courseList = JsonConvert.DeserializeObject<List<DropDownDto>>(courseResponse.Data);
+
+                ViewBag.Course = new SelectList(courseList, "Id", "Name");
+            }
+            return View();
+        }
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(ContentModel model)

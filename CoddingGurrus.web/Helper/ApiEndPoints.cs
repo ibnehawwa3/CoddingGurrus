@@ -31,6 +31,7 @@ namespace CoddingGurrus.web.Helper
         public const string UpdateCourse = "/api/Course/update";
         public const string DeleteCourse = "/api/Course/delete";
         public const string GetCourseById = "/api/Course/get-course";
+        public const string GetCourseDropDown = "/api/Course/course-dropdown-list";
 
         //topics
         public const string GetTopics = "/api/Topic/list";
@@ -38,6 +39,7 @@ namespace CoddingGurrus.web.Helper
         public const string UpdateTopics = "/api/Topic/update";
         public const string DeleteTopics= "/api/Topic/delete";
         public const string GetTopicsById = "/api/Topic/get-topic";
+        public const string GetTopicDropDownByCourseId = "/api/Topic/topic-by-course-dropdown-list";
         //content
         public const string GetContents = "/api/Content/list";
         public const string CreateContent = "/api/Content/add";

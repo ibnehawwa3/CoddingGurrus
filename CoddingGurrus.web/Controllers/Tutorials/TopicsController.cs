@@ -34,13 +34,13 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         [HttpGet("create")]
         public async Task<IActionResult> Create() 
         {
-            var response = await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetCourses);
+            var response = await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetCourseDropDown);
             if (!response.Success)
                 new GridViewModel<CourseDto> { Configuration = new GridConfiguration { HeaderText = GridHeaderText.Role, Skip = 0, NoOfPages = 0 } };
 
-            var roleList = JsonConvert.DeserializeObject<List<DropDownTitleDto>>(response.Data);
+            var roleList = JsonConvert.DeserializeObject<List<DropDownDto>>(response.Data);
 
-            ViewBag.Course = new SelectList(roleList, "Id", "Title");
+            ViewBag.Course = new SelectList(roleList, "Id", "Name");
             return View();
         }
 
