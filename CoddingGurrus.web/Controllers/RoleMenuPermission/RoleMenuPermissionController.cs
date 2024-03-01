@@ -2,13 +2,10 @@
 using CoddingGurrus.Core.Dtos;
 using CoddingGurrus.Core.Interface;
 using CoddingGurrus.Core.Models.RoleMenuPermission;
-using CoddingGurrus.Core.Models.User;
 using CoddingGurrus.web.Helper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace CoddingGurrus.web.Controllers.RoleMenuPermission
 {

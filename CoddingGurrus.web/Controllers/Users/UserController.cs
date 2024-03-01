@@ -2,14 +2,9 @@
 using CoddingGurrus.Core.Dtos;
 using CoddingGurrus.Core.Interface;
 using CoddingGurrus.Core.Models.User;
-using CoddingGurrus.Infrastructure.CommonHelper.Handler;
 using CoddingGurrus.web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CoddingGurrus.web.Controllers.Users
 {

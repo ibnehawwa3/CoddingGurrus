@@ -1,5 +1,3 @@
-using CoddingGurrus.Core.Interface;
-using CoddingGurrus.Infrastructure.CommonHelper.Handler;
 using CoddingGurrus.web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

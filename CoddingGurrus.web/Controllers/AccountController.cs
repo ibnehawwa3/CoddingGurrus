@@ -2,9 +2,7 @@
 using CoddingGurrus.Core.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Collections;
-using System.Reflection;
 using CoddingGurrus.Infrastructure.CommonHelper;
 using CoddingGurrus.web.Helper;
 
