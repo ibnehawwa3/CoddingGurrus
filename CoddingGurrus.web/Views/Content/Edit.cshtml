@@ -5,30 +5,78 @@
             @using (Html.BeginForm("Edit", "Content", FormMethod.Post, new { @class = "card" }))
             {
                 <div class="card-header">
-                    <h3 class="card-title">Edit Content</h3>
+                    <h3 class="card-title">Update Content</h3>
                 </div>
                 <div class="card-body">
-                    @Html.HiddenFor(model => model.Id)
-                    <div class="row form-group mb-2">
-                        <label class="col-1 col-form-label required">Name</label>
-                        <div class="col-md-4">
+                    <div class="row form-group mb-4">
+                        <label class="col-1 col-form-label required">Course</label>
+                        <div class="col-md-5">
+                            @Html.HiddenFor(model=>model.Id)
+                            @Html.DropDownList("CourseId", ViewBag.Course as SelectList, "Select Course", new { @class = "form-control", @id = "courseDropdown" })
+                            @Html.ValidationMessageFor(model => model.Title)
+                        </div>
+                        <label class="col-1 col-form-label required">Topic</label>
+                        <div class="col-md-5">
+                            <select id="topicDropdown" name="TopicId" class="form-control">
+                                <option value="">Select Topic</option>
+                            </select>
+                            @Html.ValidationMessageFor(model => model.TopicId)
+                        </div>
+                    </div>
+                    <div class="row form-group mb-4">
+                        <label class="col-1 col-form-label required">Title</label>
+                        <div class="col-md-5">
                             @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @required = "required" })
                             @Html.ValidationMessageFor(model => model.Title)
                         </div>
-                        <label class="col-1 col-form-label">Description</label>
-                        <div class="col-md-6">
-                            @Html.TextBoxFor(model => model.Text, new { @class = "form-control" })
+                    </div> 
+                    <div class="row form-group mb-2">
+                        <label class="col-1 col-form-label">Text</label>
+                        <div class="col-md-11">
+                            @Html.TextAreaFor(model => model.Text, new { @class = "form-control", @id = "description" })
                             @Html.ValidationMessageFor(model => model.Text)
                         </div>
                     </div>
-                    <div class="row form-group mb-2">
-                    </div>
                 </div>
                 <div class="card-footer text-end">
-                    <a href="@Url.Action("Index","Course")" class="btn btn-danger">Cancel</a>
+                    <a href="@Url.Action("Index","Content")" class="btn btn-danger">Cancel</a>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             }
         </div>
     </div>
 </div>
+<script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+        var errorMessage = $('#errorMessage').text();
+        if (errorMessage.length > 0) {
+            alert(errorMessage);
+        }
+
+        $('#courseDropdown').change(function () {
+            debugger
+            var selectedCourseId = $(this).val();
+            $.ajax({
+                url: '/Content/GetTopicDropdownByCourseId',
+                type: "GET",
+                data: { courseId: selectedCourseId },
+                success: function (response) {
+                    $('#topicDropdown').empty();
+                    response.data.forEach(function (item, index) {
+                        $('#topicDropdown').append($('<option>').val(item.id).text(item.name).attr('data-index', index));
+                    });
+                },
+
+                error: function (error) {
+                    console.log("Error during AJAX request");
+                }
+            });
+        });
+
+        $('#courseDropdown').trigger('change');
+    });
+    CKEDITOR.replace('description');
+</script>

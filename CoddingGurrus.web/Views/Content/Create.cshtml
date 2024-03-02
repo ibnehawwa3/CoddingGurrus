@@ -14,30 +14,30 @@
                     <h3 class="card-title">Create New Content</h3>
                 </div>
                 <div class="card-body">
-                    <div class="row form-group mb-2">
-                        <label class="col-1 col-form-label required">Name</label>
-                        <div class="col-md-4">
+                    <div class="row form-group mb-4">
+                        <label class="col-1 col-form-label required">Course</label>
+                        <div class="col-md-5">
                             @Html.DropDownList("CourseId", ViewBag.Course as SelectList, "Select Course", new { @class = "form-control", @id = "courseDropdown" })
                             @Html.ValidationMessageFor(model => model.Title)
                         </div>
-                        <label class="col-1 col-form-label required">Name</label>
-                        <div class="col-md-4">
-                            <select id="topicDropdown" class="form-control">
+                        <label class="col-1 col-form-label required">Topic</label>
+                        <div class="col-md-5">
+                            <select id="topicDropdown" name="TopicId" class="form-control">
                                 <option value="">Select Topic</option>
                             </select>
                             @Html.ValidationMessageFor(model => model.TopicId)
                         </div>
                     </div>
-                    <div class="row form-group mb-2">
-                        <label class="col-1 col-form-label required">Name</label>
-                        <div class="col-md-4">
+                    <div class="row form-group mb-4">
+                        <label class="col-1 col-form-label required">Title</label>
+                        <div class="col-md-5">
                             @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @required = "required" })
                             @Html.ValidationMessageFor(model => model.Title)
                         </div>
                     </div>
                     <div class="row form-group mb-2">
-                        <label class="col-1 col-form-label">Description</label>
-                        <div class="col-md-6">
+                        <label class="col-1 col-form-label">Text</label>
+                        <div class="col-md-11">
                             @Html.TextAreaFor(model => model.Text, new { @class = "form-control", @id = "description" })
                             @Html.ValidationMessageFor(model => model.Text)
                         </div>
@@ -53,7 +53,7 @@
 </div>
 <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-@* <script src="~/lib/jquery/dist/jquery.js"></script> *@
+<script src="~/lib/jquery/dist/jquery.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -63,25 +63,20 @@
         }
 
         $('#courseDropdown').change(function () {
-            debugger
+
             var selectedCourseId = $(this).val();
             $.ajax({
                 url: '/Content/GetTopicDropdownByCourseId',
                 type: "GET",
                 data: { courseId: selectedCourseId },
-                success: function (data) {
-                    debugger
-
-                    console.log(data);
-                    debugger
+                success: function (response) {
                     $('#topicDropdown').empty();
-                    debugger
-                    $.each(data, function (index, item) {
-                        $('#topicDropdown').append($('<option>').val(item.Id).text(item.Name));
+                    response.data.forEach(function (item, index) {
+                        $('#topicDropdown').append($('<option>').val(item.id).text(item.name).attr('data-index', index));
                     });
                 },
 
-                error: function () {
+                error: function (error) {
                     console.log("Error during AJAX request");
                 }
             });

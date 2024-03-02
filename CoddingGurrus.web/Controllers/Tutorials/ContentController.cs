@@ -41,7 +41,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                 dropDownDtos = JsonConvert.DeserializeObject<List<DropDownDto>>(topicResponse.Data);
             }
 
-            return Json(dropDownDtos, System.Web.Mvc.JsonRequestBehavior.AllowGet);
+            return new JsonResult(new { data = dropDownDtos });
         }
 
 
@@ -72,13 +72,25 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                 }
                 else
                 {
-                    ModelState.AddModelError("", response.ErrorMessage); // Add error message to model state
+                    ModelState.AddModelError("", response.ErrorMessage);
                 }
             }
             return View(model);
         }
         [HttpGet("edit")]
-        public async Task<IActionResult> Edit(long id) => View(await GetContentByIdAsync(id));
+        public async Task<IActionResult> Edit(long id)
+        {
+            var content = await GetContentByIdAsync(id);
+            var courseResponse = await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetCourseDropDown);
+            if (courseResponse.Success)
+            {
+                var courseList = JsonConvert.DeserializeObject<List<DropDownDto>>(courseResponse.Data);
+
+                ViewBag.Course = new SelectList(courseList, "Id", "Name",content.Id);
+            }
+
+            return View(content);
+        } 
 
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(ContentModel model)
@@ -124,11 +136,11 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                 }
             };
         }
-        private async Task<ContentModel> GetContentByIdAsync(long id)
+        private async Task<ContentViewModel> GetContentByIdAsync(long id)
         {
             var idRequest = new LongIdRequest { Id = id };
             var response = await _baseHandler.PostAsync<LongIdRequest, UserResponseModel>(idRequest, ApiEndPoints.GetContentById);
-            return JsonConvert.DeserializeObject<ContentModel>(response.Data);
+            return JsonConvert.DeserializeObject<ContentViewModel>(response.Data);
         }
     }
 }
