@@ -2,10 +2,12 @@
 using CoddingGurrus.Core.Dtos;
 using CoddingGurrus.Core.Interface;
 using CoddingGurrus.Core.Models.Menu;
+using CoddingGurrus.Core.Validations;
 using CoddingGurrus.web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace CoddingGurrus.web.Controllers.Menu
 {
@@ -15,9 +17,12 @@ namespace CoddingGurrus.web.Controllers.Menu
         private readonly IBaseHandler _baseHandler;
         private readonly int _defaultTake = 10;
         private readonly int _defaultSkip = 1;
+        MenuModelValidator validationRules;
+        bool IsDeleted=false;
         public MenuController(IBaseHandler baseHandler)
         {
             _baseHandler = baseHandler;
+            validationRules= new MenuModelValidator();
         }
 
         [HttpGet]
@@ -44,13 +49,33 @@ namespace CoddingGurrus.web.Controllers.Menu
         [HttpPost("Create")]
         public async Task<IActionResult> Create(MenuModel model)
         {
-            if (ModelState.IsValid)
+            var response = await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetMenus);
+            if (!response.Success)
+                new GridViewModel<MenuDto> { Configuration = new GridConfiguration { HeaderText = GridHeaderText.Role, Skip = 0, NoOfPages = 0 } };
+
+            var roleList = JsonConvert.DeserializeObject<List<DropDownDto>>(response.Data);
+
+            ViewBag.Parent = new SelectList(roleList, "Id", "Name");
+
+            var result = ValidationHelper.ValidateModel(model, validationRules);
+
+            if (!result.IsValid)
             {
-                model.Archived = false;
-                if ((await _baseHandler.PostAsync<MenuModel, ResponseModel>(model, ApiEndPoints.CreateMenus)).Success)
-                    return RedirectToAction("Index");
+                ValidationHelper.GetValidationErrors(result);
+                return View(model);
             }
-            return View(model);
+
+            model.Archived = false;
+            if ((await _baseHandler.PostAsync<MenuModel, ResponseModel>(model, ApiEndPoints.CreateMenus)).Success)
+            {
+                TempData["SuccessMessage"] = ResponseMessage.SuccessMessage;
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = ResponseMessage.ErrorMessage;
+                return View(model);
+            }
         }
 
         [HttpGet("edit")]
@@ -71,18 +96,31 @@ namespace CoddingGurrus.web.Controllers.Menu
         {
             model.Archived = false;
             if (ModelState.IsValid && (await _baseHandler.PostAsync<MenuModel, ResponseModel>(model, ApiEndPoints.UpdateMenus)).Success)
+            {
+                TempData["UpdateSuccessMessage"] = ResponseMessage.UpdateSuccessMessage;
                 return RedirectToAction("Index");
-
-            return View();
+            }
+            else
+            {
+                TempData["UpdateErrorMessage"] = ResponseMessage.UpdateErrorMessage;
+                return View(model);
+            }
         }
 
         [HttpPost("delete")]
         public async Task<IActionResult> Delete(string id)
         {
             if ((await _baseHandler.DeleteAsync<ResponseModel>(ApiEndPoints.DeleteMenus + "?Id=" + id)).Success)
+            {
+                this.IsDeleted=true;
+                TempData["DeleteSuccessMessage"] = ResponseMessage.DeleteSuccessMessage;
                 return RedirectToAction("Index");
-
-            return View("Error");
+            }
+            else
+            {
+                TempData["DeleteErrorMessage"] = ResponseMessage.DeleteErrorMessage;
+                return View("Error");
+            }
         }
 
         public async Task<GridViewModel<MenuDto>> Search(string searchTerm) => await GetMenusViewModelAsync(searchTerm);

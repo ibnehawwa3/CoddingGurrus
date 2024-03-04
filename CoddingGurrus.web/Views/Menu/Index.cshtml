@@ -1,4 +1,26 @@
-﻿<div class="page-body">
+﻿
+@if (TempData["DeleteSuccessMessage"] != null)
+{
+    <script>
+        if (typeof toastr !== 'undefined') {
+            toastr.success('@TempData["DeleteSuccessMessage"]', 'Success');
+        } else {
+            console.error('toastr.js is not properly initialized.');
+        }
+    </script>
+}
+
+@if (TempData["DeleteErrorMessage"] != null)
+{
+    <script>
+        if (typeof toastr !== 'undefined') {
+            toastr.success('@TempData["DeleteErrorMessage"]', 'Success');
+        } else {
+            console.error('toastr.js is not properly initialized.');
+        }
+    </script>
+}
+<div class="page-body">
     <div class="container-xl">
         @await Html.PartialAsync("_ApplicationGridPartial")
     </div>

@@ -2,10 +2,13 @@
 using CoddingGurrus.Core.Dtos;
 using CoddingGurrus.Core.Interface;
 using CoddingGurrus.Core.Models.Topics;
+using CoddingGurrus.Core.Validations;
 using CoddingGurrus.web.Helper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace CoddingGurrus.web.Controllers.Tutorials
 {
@@ -15,10 +18,11 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         private readonly IBaseHandler _baseHandler;
         private readonly int _defaultTake = 10;
         private readonly int _defaultSkip = 1;
-
+        TopicModelValidator validationRules;
         public TopicsController(IBaseHandler baseHandler)
         {
             _baseHandler = baseHandler;
+            validationRules= new TopicModelValidator();
         }
 
         [HttpGet]
@@ -45,21 +49,37 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         [HttpPost("create")]
         public async Task<IActionResult> Create(TopicsModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var response = await _baseHandler.PostAsync<TopicsModel, ResponseModel>(model, ApiEndPoints.CreateTopics);
+            var dropdownResponse = await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetCourseDropDown);
 
-                if (response.Success)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ModelState.AddModelError("", response.ErrorMessage);
-                }
+            if (!dropdownResponse.Success)
+            {
+                ModelState.AddModelError("", dropdownResponse.ErrorMessage ?? "Failed to retrieve dropdown data.");
+                return View(model);
             }
-            return View(model);
-        }
+
+            var roleList = JsonConvert.DeserializeObject<List<DropDownDto>>(dropdownResponse.Data);
+            ViewBag.Course = new SelectList(roleList, "Id", "Name");
+
+            var result = ValidationHelper.ValidateModel(model,validationRules);
+
+            if (!result.IsValid)
+            {
+                ValidationHelper.GetValidationErrors(result);
+                return View(model);
+            }
+
+            var createResponse = await _baseHandler.PostAsync<TopicsModel, ResponseModel>(model, ApiEndPoints.CreateTopics);
+
+            if (createResponse.Success)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", createResponse.ErrorMessage ?? "Failed to create topic.");
+                return View(model);
+            }
+         }
         [HttpGet("edit")]
         public async Task<IActionResult> Edit(long id)
         {
@@ -76,7 +96,15 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(TopicsModel model)
         {
-            if (ModelState.IsValid && (await _baseHandler.PostAsync<TopicsModel, ResponseModel>(model, ApiEndPoints.UpdateTopics)).Success)
+            var result = ValidationHelper.ValidateModel(model, validationRules);
+
+            if (!result.IsValid)
+            {
+                ValidationHelper.GetValidationErrors(result);
+                return View(model);
+            }
+
+            if ((await _baseHandler.PostAsync<TopicsModel, ResponseModel>(model, ApiEndPoints.UpdateTopics)).Success)
                 return RedirectToAction("Index");
 
             return View(model);

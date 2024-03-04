@@ -1,7 +1,7 @@
 ﻿@model CoddingGurrus.Core.Models.Topics.TopicsModel
 @if (!ViewData.ModelState.IsValid)
 {
-    <div id="errorMessage" style="display:none;">@Html.Raw(ViewData.ModelState[""].Errors.First().ErrorMessage)</div>
+    @* <div id="errorMessage" style="display:none;">@Html.Raw(ViewData.ModelState[""].Errors.First().ErrorMessage)</div> *@
 }
 <div class="page-body">
     <div class="container-xl">
@@ -9,13 +9,13 @@
             @using (Html.BeginForm("Edit", "Topics", FormMethod.Post, new { @class = "card" }))
             {
                 <div class="card-header">
-                    <h3 class="card-title">Create New Topics</h3>
+                    <h3 class="card-title">Update Topics</h3>
                 </div>
                 <div class="card-body">
                     <div class="row form-group mb-2">
-                        <label class="col-2 col-form-label required">Name</label>
+                        <label class="col-2 col-form-label required">Title</label>
                         <div class="col-md-4">
-                            @Html.HiddenFor(model=>model.Id);
+                            @Html.HiddenFor(model=>model.Id)
                             @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @required = "required" })
                             @Html.ValidationMessageFor(model => model.Title)
                         </div>
@@ -24,10 +24,10 @@
                             @Html.DropDownList("CourseId", ViewBag.Course as SelectList, "Select Course", new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.CourseId)
                         </div>
-                    </div>
+                    </div>  
                     <div class="row form-group mb-2">
                         <label class="col-2 col-form-label">Description</label>
-                        <div class="col-md-4">
+                        <div class="col-md-4"> 
                             @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Description)
                         </div>

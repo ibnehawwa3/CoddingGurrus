@@ -59,6 +59,16 @@ namespace CoddingGurrus.web.Helper
     }
 
 
+    public static class ResponseMessage
+    {
+        public const string SuccessMessage = "Item successfully added.";
+        public const string ErrorMessage = "Failed to add item. Please try again.";
+        public const string UpdateSuccessMessage = "Item updated successfully";
+        public const string UpdateErrorMessage = "Failed to update item. Please try again.";
+        public const string DeleteSuccessMessage = "Item deleted successfully.";
+        public const string DeleteErrorMessage = "Failed to delete item. Please try again.";
+    }
+
     public enum ActionType
     {
         Create,

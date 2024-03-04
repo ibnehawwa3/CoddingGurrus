@@ -2,6 +2,7 @@
 using CoddingGurrus.Core.Dtos;
 using CoddingGurrus.Core.Interface;
 using CoddingGurrus.Core.Models.Course;
+using CoddingGurrus.Core.Validations;
 using CoddingGurrus.web.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,10 +15,11 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         private readonly IBaseHandler _baseHandler;
         private readonly int _defaultTake = 10;
         private readonly int _defaultSkip = 1;
-
+        CourseModelValidator validationRules;
         public CourseController(IBaseHandler baseHandler)
         {
             _baseHandler = baseHandler;
+            validationRules= new CourseModelValidator();
         }
 
         [HttpGet]
@@ -34,20 +36,25 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         [HttpPost("create")]
         public async Task<IActionResult> Create(CourseModel model)
         {
-            if (ModelState.IsValid)
-            {
-                var response = await _baseHandler.PostAsync<CourseModel, UserResponseModel>(model, ApiEndPoints.CreateCourse);
+            var result = ValidationHelper.ValidateModel(model, validationRules);
 
-                if (response.Success)
-                {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ModelState.AddModelError("", response.ErrorMessage);
-                }
+            if (!result.IsValid)
+            {
+                ValidationHelper.GetValidationErrors(result);
+                return View(model);
             }
-            return View(model);
+
+            var response = await _baseHandler.PostAsync<CourseModel, UserResponseModel>(model, ApiEndPoints.CreateCourse);
+
+            if (response.Success)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", response.ErrorMessage);
+                return View(model);
+            }
         }
         [HttpGet("edit")]
         public async Task<IActionResult> Edit(long id) => View(await GetCourseByIdAsync(id));
@@ -55,7 +62,15 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(CourseModel model)
         {
-            if (ModelState.IsValid && (await _baseHandler.PostAsync<CourseModel, UserResponseModel>(model, ApiEndPoints.UpdateCourse)).Success)
+            var result = ValidationHelper.ValidateModel(model, validationRules);
+
+            if (!result.IsValid)
+            {
+                ValidationHelper.GetValidationErrors(result);
+                return View(model);
+            }
+
+            if ((await _baseHandler.PostAsync<CourseModel, UserResponseModel>(model, ApiEndPoints.UpdateCourse)).Success)
                 return RedirectToAction("Index");
 
             return View(model);
