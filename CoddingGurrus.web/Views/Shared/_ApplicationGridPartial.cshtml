@@ -317,9 +317,14 @@
             type: 'POST',
             data: { id: id },
             success: function (response) {
-                location.reload();
+                toastr.success('Item deleted successfully.', 'Success');
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
             },
             error: function (xhr, status, error) {
+                debugger
+                toastr.success('Failed to delete item. Please try again.', 'Success');
                 console.error(xhr.responseText);
             }
         });
