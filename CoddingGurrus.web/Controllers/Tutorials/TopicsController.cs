@@ -72,14 +72,15 @@ namespace CoddingGurrus.web.Controllers.Tutorials
 
             if (createResponse.Success)
             {
+                TempData["SuccessMessage"] = ResponseMessage.SuccessMessage;
                 return RedirectToAction("Index");
             }
             else
             {
-                ModelState.AddModelError("", createResponse.ErrorMessage ?? "Failed to create topic.");
+                TempData["ErrorMessage"] = ResponseMessage.ErrorMessage;
                 return View(model);
             }
-         }
+        }
         [HttpGet("edit")]
         public async Task<IActionResult> Edit(long id)
         {
@@ -105,9 +106,15 @@ namespace CoddingGurrus.web.Controllers.Tutorials
             }
 
             if ((await _baseHandler.PostAsync<TopicsModel, ResponseModel>(model, ApiEndPoints.UpdateTopics)).Success)
+            {
+                TempData["UpdateSuccessMessage"] = ResponseMessage.UpdateSuccessMessage;
                 return RedirectToAction("Index");
-
-            return View(model);
+            }
+            else
+            {
+                TempData["UpdateErrorMessage"] = ResponseMessage.UpdateErrorMessage;
+                return View(model);
+            }
         }
 
         [HttpPost("delete")]

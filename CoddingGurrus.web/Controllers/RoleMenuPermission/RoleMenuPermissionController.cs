@@ -50,7 +50,15 @@ namespace CoddingGurrus.web.Controllers.RoleMenuPermission
             if (ModelState.IsValid)
             {
                 if ((await _baseHandler.PostAsync<List<RoleMenuPermissionModel>, RoleMenuPermissionResponseModel>(model, ApiEndPoints.CreateRoleMenuPermission)).Success)
+                {
+                    TempData["SuccessMessage"] = ResponseMessage.SuccessMessage;
                     return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = ResponseMessage.ErrorMessage;
+                    return View(model);
+                }
             }
             return View(model);
         }

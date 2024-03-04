@@ -18,7 +18,6 @@ namespace CoddingGurrus.web.Controllers.Menu
         private readonly int _defaultTake = 10;
         private readonly int _defaultSkip = 1;
         MenuModelValidator validationRules;
-        bool IsDeleted=false;
         public MenuController(IBaseHandler baseHandler)
         {
             _baseHandler = baseHandler;
@@ -112,13 +111,10 @@ namespace CoddingGurrus.web.Controllers.Menu
         {
             if ((await _baseHandler.DeleteAsync<ResponseModel>(ApiEndPoints.DeleteMenus + "?Id=" + id)).Success)
             {
-                this.IsDeleted=true;
-                TempData["DeleteSuccessMessage"] = ResponseMessage.DeleteSuccessMessage;
                 return RedirectToAction("Index");
             }
             else
             {
-                TempData["DeleteErrorMessage"] = ResponseMessage.DeleteErrorMessage;
                 return View("Error");
             }
         }

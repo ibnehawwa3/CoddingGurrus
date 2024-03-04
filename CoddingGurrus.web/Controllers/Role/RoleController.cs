@@ -38,7 +38,15 @@ namespace CoddingGurrus.web.Controllers
             {
                 model.Id = Guid.NewGuid();
                 if ((await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.CreateRole)).Success)
+                {
+                    TempData["SuccessMessage"] = ResponseMessage.SuccessMessage;
                     return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = ResponseMessage.ErrorMessage;
+                    return View(model);
+                }
             }
             return View(model);
         }
@@ -50,9 +58,15 @@ namespace CoddingGurrus.web.Controllers
         public async Task<IActionResult> Edit(RoleModel model)
         {
             if (ModelState.IsValid && (await _baseHandler.PostAsync<RoleModel, RoleResponseModel>(model, ApiEndPoints.UpdateRole)).Success)
+            {
+                TempData["UpdateSuccessMessage"] = ResponseMessage.UpdateSuccessMessage;
                 return RedirectToAction("Index");
-
-            return View();
+            }
+            else
+            {
+                TempData["UpdateErrorMessage"] = ResponseMessage.UpdateErrorMessage;
+                return View(model);
+            }
         }
 
         [HttpPost("delete")]

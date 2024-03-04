@@ -68,11 +68,13 @@ namespace CoddingGurrus.web.Controllers.Tutorials
 
                 if (response.Success)
                 {
+                    TempData["SuccessMessage"] = ResponseMessage.SuccessMessage;
                     return RedirectToAction("Index");
                 }
                 else
                 {
-                    ModelState.AddModelError("", response.ErrorMessage);
+                    TempData["ErrorMessage"] = ResponseMessage.ErrorMessage;
+                    return View(model);
                 }
             }
             return View(model);
@@ -96,9 +98,15 @@ namespace CoddingGurrus.web.Controllers.Tutorials
         public async Task<IActionResult> Edit(ContentModel model)
         {
             if (ModelState.IsValid && (await _baseHandler.PostAsync<ContentModel, UserResponseModel>(model, ApiEndPoints.UpdateContent)).Success)
+            {
+                TempData["UpdateSuccessMessage"] = ResponseMessage.UpdateSuccessMessage;
                 return RedirectToAction("Index");
-
-            return View(model);
+            }
+            else
+            {
+                TempData["UpdateErrorMessage"] = ResponseMessage.UpdateErrorMessage;
+                return View(model);
+            }
         }
 
         [HttpPost("delete")]
