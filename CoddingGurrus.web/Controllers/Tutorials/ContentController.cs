@@ -14,8 +14,8 @@ namespace CoddingGurrus.web.Controllers.Tutorials
     public class ContentController : Controller
     {
         private readonly IBaseHandler _baseHandler;
-        private readonly int _defaultTake = 10;
-        private readonly int _defaultSkip = 1;
+        private int _defaultTake = 10;
+        private int _defaultSkip = 1;
 
         public ContentController(IBaseHandler baseHandler)
         {
@@ -117,6 +117,14 @@ namespace CoddingGurrus.web.Controllers.Tutorials
 
             return View("Error");
         }
+
+        [HttpGet("HandlePagination")]
+        public async Task<GridViewModel<ContentDto>> HandlePagination(int pageSize)
+        {
+            this._defaultSkip = pageSize;
+            ViewBag.pageSize = pageSize;
+            return await GetContentsViewModelAsync(string.Empty);
+        }
         public async Task<GridViewModel<ContentDto>> Search(string searchTerm) => await GetContentsViewModelAsync(searchTerm);
 
         private async Task<GridViewModel<ContentDto>> GetContentsViewModelAsync(string searchText)
@@ -137,7 +145,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                     UpdateAction = nameof(ActionType.Edit),
                     DeleteAction = nameof(ActionType.Delete),
                     ControllerName = nameof(ControllerName.Content),
-                    Skip = 0,
+                    Skip = this._defaultSkip,
                     Take = _defaultTake,
                     NoOfPages = (int)Math.Ceiling((double)contentModels[0].TotalRecords / _defaultTake),
                     DisplayFields = DisplayFieldsHelper.GetDisplayFields<ContentDto>(property => property.Name != "TotalRecords" && property.Name != "Id")

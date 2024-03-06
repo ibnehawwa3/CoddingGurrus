@@ -13,8 +13,8 @@ namespace CoddingGurrus.web.Controllers.Tutorials
     public class CourseController : Controller
     {
         private readonly IBaseHandler _baseHandler;
-        private readonly int _defaultTake = 10;
-        private readonly int _defaultSkip = 1;
+        private int _defaultTake = 10;
+        private int _defaultSkip = 1;
         CourseModelValidator validationRules;
         public CourseController(IBaseHandler baseHandler)
         {
@@ -83,6 +83,14 @@ namespace CoddingGurrus.web.Controllers.Tutorials
             }
         }
 
+        [HttpGet("HandlePagination")]
+        public async Task<GridViewModel<CourseDto>> HandlePagination(int pageSize)
+        {
+            this._defaultSkip = pageSize;
+            ViewBag.pageSize = pageSize;
+            return await GetCoursesViewModelAsync(string.Empty);
+        }
+
         [HttpPost("delete")]
         public async Task<IActionResult> Delete(long id)
         {
@@ -111,10 +119,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                     UpdateAction = nameof(ActionType.Edit),
                     DeleteAction = nameof(ActionType.Delete),
                     ControllerName = nameof(ControllerName.Course),
-                    //HeaderText = GridConstants.ButtonText.Course,
-                    //CreateButtonText = GridConstants.ButtonText.Course,
-                    //ControllerName = GridConstants.ControllerNames.Course,
-                    Skip = 0,
+                    Skip = this._defaultSkip,
                     Take = _defaultTake,
                     NoOfPages = (int)Math.Ceiling((double)courseModels[0].TotalRecords / _defaultTake),
                     DisplayFields = DisplayFieldsHelper.GetDisplayFields<CourseDto>(property => property.Name != "TotalRecords" && property.Name != "Id")

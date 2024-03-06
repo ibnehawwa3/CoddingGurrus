@@ -71,6 +71,7 @@
                 </tbody>
             </table>
         </div>
+        <input type="hidden" id="skipValue" value="@Model.Configuration.Skip" />
         <div class="card-footer d-flex align-items-center" id="paginationDiv">
             <p class="m-0 text-muted">Showing <span>@Model.Configuration.Skip</span> to <span>@Model.Configuration.Take</span> of <span>@Model.Data[0].TotalRecords</span> entries</p>
             <ul class="pagination m-0 ms-auto">
@@ -87,7 +88,6 @@
                         <a class="page-link" href="#">@i</a>
                     </li>
                 }
-
                 <li class="page-item @(Model.Configuration.Skip == Model.Configuration.NoOfPages ? "disabled" : "")">
                     <a class="page-link" id="nextClick" href="#">
                         next 
@@ -130,8 +130,6 @@
         </div>
     </div>
 </div>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/jquery/dist/jquery.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -142,26 +140,41 @@
             event.preventDefault();
             var currentSkipValue = parseInt($('#currentSkip').val(), 0);
             if (currentSkipValue > 1) {
-                var pageSize = currentSkipValue - 1;
-                pagination(pageSize);
+                var skipValue = parseInt($("#skipValue").val());
+                skipValue -= 1;
+                $("#skipValue").val(skipValue);
+                pagination(skipValue);
             }
         });
 
 
         $(document).on('click', '#nextClick', function (event) {
             event.preventDefault();
-            if (@Model.Configuration.Skip < @Model.Configuration.NoOfPages) {
-                pageSize = @Model.Configuration.Skip + 1;
-                pagination(pageSize);
+            var skipValue = parseInt($("#skipValue").val());
+            if (skipValue < @Model.Configuration.NoOfPages) {
+                skipValue += 1;
+                $("#skipValue").val(skipValue);
+                pagination(skipValue);
             }
+        });
+
+        $(document).on('click', '.page-link', function (event) {
+            event.preventDefault();
+            var pageNumber = parseInt($(this).text()); 
+            $("#skipValue").val(pageNumber);
+            pagination(pageNumber);
         });
 
         // Attach click event handler to the previous button
         $("#previousClick").on('click', function (e) {
             debugger
             e.preventDefault(); // Prevent the default behavior of the anchor link
-            if (@Model.Configuration.Skip > 1) {
+            var skipValue = parseInt($("#skipValue").val());
+            if (skipValue > 1) {
+                debugger
                 var pageSize = @ViewBag.pageSize - 1;
+                skipValue += 1;
+                $("#skipValue").val(skipValue);
                 pagination(pageSize);
             }
         });
@@ -324,7 +337,7 @@
             },
             error: function (xhr, status, error) {
                 debugger
-                toastr.success('Failed to delete item. Please try again.', 'Success');
+                toastr.error('Failed to delete item. Please try again.', 'Error');
                 console.error(xhr.responseText);
             }
         });

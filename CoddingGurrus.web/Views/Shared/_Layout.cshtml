@@ -45,7 +45,7 @@
       {
           <script>
                   if (typeof toastr !== 'undefined') {
-                toastr.success('@TempData["ErrorMessage"]', 'Success');
+                toastr.error('@TempData["ErrorMessage"]', 'Error');
                   } else {
                   console.error('toastr.js is not properly initialized.');
                   }
@@ -67,7 +67,7 @@
       {
           <script>
                   if (typeof toastr !== 'undefined') {
-                toastr.success('@TempData["UpdateErrorMessage"]', 'Success');
+                toastr.error('@TempData["UpdateErrorMessage"]', 'Error');
                   } else {
                   console.error('toastr.js is not properly initialized.');
                   }

@@ -15,8 +15,8 @@ namespace CoddingGurrus.web.Controllers.Menu
     public class MenuController : Controller
     {
         private readonly IBaseHandler _baseHandler;
-        private readonly int _defaultTake = 10;
-        private readonly int _defaultSkip = 1;
+        private  int _defaultTake = 10;
+        private  int _defaultSkip = 1;
         MenuModelValidator validationRules;
         public MenuController(IBaseHandler baseHandler)
         {
@@ -119,18 +119,25 @@ namespace CoddingGurrus.web.Controllers.Menu
             }
         }
 
+        [HttpGet("HandlePagination")]
+        public async Task<GridViewModel<MenuDto>> HandlePagination(int pageSize)
+        {
+            this._defaultSkip = pageSize;
+            ViewBag.pageSize = pageSize;
+            return await GetMenusViewModelAsync(string.Empty);
+        }
         public async Task<GridViewModel<MenuDto>> Search(string searchTerm) => await GetMenusViewModelAsync(searchTerm);
 
         private async Task<GridViewModel<MenuDto>> GetMenusViewModelAsync(string searchText)
         {
-            var response = await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetMenus);
+            var response = await _baseHandler.GetAsync<ResponseModel>(ApiEndPoints.GetMenus + $"?Skip={_defaultSkip}&Take={_defaultTake}&TextToSearch={searchText}");
             if (!response.Success)
                 return new GridViewModel<MenuDto> { Configuration = new GridConfiguration { HeaderText = GridHeaderText.Role, Skip = 0, NoOfPages = 0 } };
 
-            var userModels = JsonConvert.DeserializeObject<IEnumerable<MenuDto>>(response.Data);
+            var menuModels = JsonConvert.DeserializeObject<IEnumerable<MenuDto>>(response.Data);
             return new GridViewModel<MenuDto>
             {
-                Data = userModels,
+                Data = menuModels,
                 Configuration = new GridConfiguration
                 {
                     HeaderText = GridHeaderText.Menu,
@@ -139,9 +146,9 @@ namespace CoddingGurrus.web.Controllers.Menu
                     UpdateAction = nameof(ActionType.Edit),
                     DeleteAction = nameof(ActionType.Delete),
                     ControllerName = nameof(ControllerName.Menu),
-                    Skip = 0,
+                    Skip = this._defaultSkip,
                     Take = _defaultTake,
-                    NoOfPages = 1,
+                    NoOfPages = (int)Math.Ceiling((double)menuModels[0].TotalRecords / _defaultTake),
                     DisplayFields = DisplayFieldsHelper.GetDisplayFields<MenuDto>(property => property.Name != "TotalRecords" && property.Name != "ConcurrencyStamp" && property.Name != "NormalizedName")
                 }
             };

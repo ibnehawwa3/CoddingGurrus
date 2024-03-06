@@ -16,8 +16,8 @@ namespace CoddingGurrus.web.Controllers.Tutorials
     public class TopicsController : Controller
     {
         private readonly IBaseHandler _baseHandler;
-        private readonly int _defaultTake = 10;
-        private readonly int _defaultSkip = 1;
+        private int _defaultTake = 10;
+        private int _defaultSkip = 1;
         TopicModelValidator validationRules;
         public TopicsController(IBaseHandler baseHandler)
         {
@@ -94,6 +94,14 @@ namespace CoddingGurrus.web.Controllers.Tutorials
             return View(topics);
         }
 
+        [HttpGet("HandlePagination")]
+        public async Task<GridViewModel<TopicsDto>> HandlePagination(int pageSize)
+        {
+            this._defaultSkip = pageSize;
+            ViewBag.pageSize = pageSize;
+            return await GetTopicsViewModelAsync(string.Empty);
+        }
+
         [HttpPost("edit")]
         public async Task<IActionResult> Edit(TopicsModel model)
         {
@@ -146,7 +154,7 @@ namespace CoddingGurrus.web.Controllers.Tutorials
                     UpdateAction = nameof(ActionType.Edit),
                     DeleteAction = nameof(ActionType.Delete),
                     ControllerName = nameof(ControllerName.Topics),
-                    Skip = 0,
+                    Skip = this._defaultSkip,
                     Take = _defaultTake,
                     NoOfPages = (int)Math.Ceiling((double)courseModels[0].TotalRecords / _defaultTake),
                     DisplayFields = DisplayFieldsHelper.GetDisplayFields<TopicsDto>(property => property.Name != "TotalRecords")
