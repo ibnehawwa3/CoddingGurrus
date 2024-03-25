@@ -52,6 +52,12 @@
     </div>
 </div>
 <script src="https://cdn.ckeditor.com/4.16.2/standard-all/ckeditor.js"></script>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 
@@ -83,5 +89,10 @@
         });
     });
 
-    CKEDITOR.replace('description');
+    @*CKEDITOR.replace('description');*@
+        CKEDITOR.replace('description', {
+            extraPlugins: 'codesnippet',
+            codeSnippet_theme: 'default',
+            // Specify other config options as needed
+        });
 </script>
